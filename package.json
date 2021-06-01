@@ -1,0 +1,33 @@
+{
+  "name": "cougarcs-memberbot",
+  "version": "0.0.1",
+  "description": "A bot for adding member roles.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adil-Iqbal/CougarCS-MemberBot.git"
+  },
+  "keywords": [
+    "discord",
+    "member",
+    "roles"
+  ],
+  "author": "Adil Iqbal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Adil-Iqbal/CougarCS-MemberBot/issues"
+  },
+  "homepage": "https://github.com/Adil-Iqbal/CougarCS-MemberBot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
+    "mongodb": "^3.6.9",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0"
+  }
+}
