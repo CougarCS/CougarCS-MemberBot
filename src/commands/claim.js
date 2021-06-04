@@ -11,9 +11,9 @@ module.exports = {
 			await message.reply(ALREADY_HAS_ROLE);
 			return;
 		}
-		
+
 		// Check if user already in cache, if so, grant role and exit.
-		if (await Cache.exists({ discordId: { '$eq': message.author.id } })) {
+		if (await Cache.exists({ discordId: { $eq : message.author.id } })) {
 			await message.member.roles.add(role);
 			await message.reply(ALREADY_CLAIMED);
 			return;
@@ -21,5 +21,6 @@ module.exports = {
 
 		// Otherwise, send DM for PSID and exit.
 		await message.reply(PUNT_TO_DM);
+		await message.author.send(PSID_PROMPT);
 	},
 };
