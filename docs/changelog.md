@@ -2,8 +2,7 @@
 
 ## Version 0.0.2 - *Unreleased*
 - Database has been integrated.
-- Aliases and help command has been implemented.
-- Superuser only has been integrated.
+- The `claim` command has been implemented.
 - Docs have been started.
 
 ## Version 0.0.1 - 6/1/2021
