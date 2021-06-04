@@ -20,21 +20,25 @@ client.once('ready', () => {
 });
 
 client.on('message', async (message) => {
+	if (message.author.bot) return;
+
 	const roleId = serverRoleMap[message.guild.id];
 	const role = await message.guild.roles.fetch(roleId);
 
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
-	const command = args.shift().toLowerCase();
-	if (!client.commands.has(command)) return;
+	if (message.content.startsWith(prefix)) {
+		const args = message.content.slice(prefix.length).trim().split(/ +/);
+		const command = args.shift().toLowerCase();
+		if (!client.commands.has(command)) return;
+	
+		try {
+			client.commands.get(command).execute(message, args, role);
+		}
+		catch (error) {
+			console.error(error);
+			message.reply('there was an error trying to execute that command!');
+		}
+	}
 
-	try {
-		client.commands.get(command).execute(message, args, role);
-	}
-	catch (error) {
-		console.error(error);
-		message.reply('there was an error trying to execute that command!');
-	}
 
 	if (message.channel.type == 'dm') {
 		// TODO: Spam protect this code.
