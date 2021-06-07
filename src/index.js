@@ -3,6 +3,8 @@ const Discord = require('discord.js');
 const mongoose = require("mongoose");
 const fs = require('fs');
 const { prefix, serverRoleMap } = require('./config.json');
+const { ALREADY_HAS_ROLE, ALREADY_CLAIMED } = require("./copy");
+const Cache = require("./cache");
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -42,6 +44,14 @@ client.on('message', async (message) => {
 
 	if (message.channel.type == 'dm') {
 		// TODO: Spam protect this code.
+		// Check if user already submitted valid psid, 
+		if (Cache.exists({discordId: {$eq:message.author.id}})) {
+			// If so, check if he already has roles.
+			for ()
+
+		}
+				// If not, give him roles and reply.
+				// If so, send him off...
 		// Check user's psid against Api.
 		// If record exists and member --> grant role, add to cache, post discordId, & inform expiry.
 		// If record exists and not member --> post discordId, inform expiry, pimp ccs.
