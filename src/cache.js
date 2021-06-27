@@ -11,6 +11,5 @@ const CacheSchema = new mongoose.Schema({
 	},
 });
 
-const Cache = mongoose.model('CacheMap', CacheSchema);
-
+const Cache = mongoose.model('Cache', CacheSchema);
 module.exports = Cache;

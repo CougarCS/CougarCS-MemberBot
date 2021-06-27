@@ -1,9 +1,25 @@
+const config = require("./config.json");
+
 module.exports = {
+    MEMBER_ROLE_DOES_NOT_EXIST: "A role named \`Member\` does not exist!",
+    OFFICER_ROLE_DOES_NOT_EXIST: "A role named \`Officer\` does not exist!",
 	ALREADY_HAS_ROLE: 'You already have the \`Member\` role.',
     ALREADY_CLAIMED: "Nice to see you again. \`Member\` role granted.",
+    NOT_ENOUGH_PYLONS: "You do not have the required credentials to use this command!",
     PUNT_TO_DM: "We'll need to chat in private. Check your DM to continue.",
-    PSID_PROMPT: "To give you the \`Member\` role, I'll need to lookup your membership status. Would you mind replying with your PeopleSoft ID?",
+    PSID_PROMPT_QUALIFIER: "To give you the \`Member\` role, I'll need to look you up in our member database.",
+    PSID_PROMPT: "Would you mind replying with your Peoplesoft ID, followed by your email address? I'll need those to look you up.",
+    INPUT_EXAMPLE: "For example, a valid response looks like this: \`12345678 somone@somewhere.com\`",
+    INPUT_ERROR: "I didn't understand your response. Please enter your PeopleSoft ID followed by your email address. I'll need those to look you up.",
     NO_MEMBER_RECORD: "We don't see you in our Members database. Consider joining CougarCS here: http://www.cougarcs.com/register/",
+    PIMP_COUGARCS: "CougarCS is one of the largest, student-lead Computer Science clubs at the University of Houston.",
     IS_A_MEMBER: "**Congradulations!** You have been granted the \`Member\` role on all of the CougarCS Discord Servers. It's a pleasure to have you!",
-    EXPIRED_MEMBER: "",
+    PUNT_TO_SERVER: `I remember you! Go to any server and use the \`${config.prefix}claim\` command to redeem your membership role.`,
+    USE_CLAIM_IF_NOT_MEMBER: `If you ever find yourself without the \`Member\` role on our servers, use the \`${config.prefix}claim\` command again, and I'll take care of it.`,
+    IF_THIS_IS_AN_ERROR: "If you feel this was an error, consider informing a CougarCS Officer of the issue.",
+    BAD_BOT_CREDS: "My credentials are no longer valid. Please inform a CougarCS Officer to get this issue resolved!",
+    SOME_ERROR: "Oops! Something went wrong. Please try again later.",
+    isNotMemberMessage: name => `Hey ${name}, we found you in our records, but we noticed you weren't a member. Consider joining CougarCS here: http://www.cougarcs.com/register/`,
+    informOfficer: officerRole => `<@${officerRole.id}>, please add a role named \`Member\` to the server!`,
+    expiredMember: expiry => `According to our records, your membership expired on ${expiry["Term"]} of ${expiry["Year"]}.`,
 };
