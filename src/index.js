@@ -131,7 +131,7 @@ client.on('message', async (message) => {
 				await message.reply(SOME_ERROR);
 				return;
 			}
-			
+
 			console.log("actualEmail: " + actualEmail);
 			if (givenEmail.toLowerCase() !== actualEmail.toLowerCase()) {
 				await message.reply(USE_SAME_EMAIL);
@@ -148,23 +148,23 @@ client.on('message', async (message) => {
 			});
 
 			for (let serverId of cougarcsServerIds) {
-				const guild = await client.guilds.cache.fetch(serverId);
+				const guild = client.guilds.cache.find(g => g.id === serverId);
 				if (guild === undefined) continue;
 
-				// Add user to CougarCS server if he isn't already.
-				if (!(await guild.member.cache.has(message.author.id))) {
-					await guild.member.add(message.author.id);
+				// Add user to CougarCS server if user isn't already.
+				if (!guild.members.cache.has(message.author.id)) {
+					guild.members.add(message.author.id);
 				}
 
 				// Fetch member for server.
-				const member = await guild.member.cache.find(m => m.id === message.author.id);
+				const member = guild.members.cache.find(m => m.id === message.author.id);
 				if (member === undefined) continue;
 				
 				// Fetch memberRole for server.
-				const memberRole = await guild.roles.cache.find(r => r.name.toLowerCase() === "member");
+				const memberRole = guild.roles.cache.find(r => r.name.toLowerCase() === "member");
 				if (memberRole === undefined) continue;
 
-				// Add member role if he doesn't have it already.
+				// Add member role if user doesn't have it already.
 				if ((await member.roles.cache.has(memberRole.id))) continue;
 				await member.addRole(memberRole.id);
 			}
