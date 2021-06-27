@@ -5,19 +5,26 @@ const Cache = require("./cache");
 const fetch = require("node-fetch");
 const fs = require('fs');
 const { prefix, cougarcsServerIds } = require('./config.json');
+const { getStatus, getEmail, getToken } = require('./memberAPI');
 const { 
 	INPUT_ERROR, 
 	PUNT_TO_SERVER, 
 	IS_A_MEMBER, 
 	SOME_ERROR, 
 	IF_THIS_IS_AN_ERROR, 
-	USE_CLAIM_IF_NOT_MEMBER, 
+	USE_CLAIM_IF_NOT_MEMBER,
+	PIMP_COUGARCS,
+	BAD_BOT_CREDS,
+	NO_MEMBER_RECORD,
+	USE_SAME_EMAIL,
 	isNotMemberMessage,
 } = require("./copy");
 
 const handledStatusCodes = [200, 404, 403];
-const baseUrl = process.env.MEMBER_API;
-const psidRegex = /^\d{8}$/;
+const spacesRegex = / +/;
+const psidRegex = /^\d{7}$/; 
+const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const userInputRegex = /^\d{7} +[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -29,21 +36,20 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
-
-client.once('ready', () => {
-	console.log('Ready!');
+client.once('ready', async () => {
+	await getToken();
 });
 
 client.on('message', async (message) => {
 	if (message.author.bot) return;
 	
 	if (message.content.startsWith(prefix)) {
-		const args = message.content.slice(prefix.length).trim().split(/ +/);
+		const args = message.content.slice(prefix.length).trim().split(spacesRegex);
 		const command = args.shift().toLowerCase();
 		if (!client.commands.has(command)) return;
 	
 		try {
-			client.commands.get(command).execute(message, args, role);
+			client.commands.get(command).execute(message);
 			return;
 		}
 		catch (error) {
@@ -56,36 +62,47 @@ client.on('message', async (message) => {
 	if (message.channel.type == 'dm') {
 
 		// Check if user already submitted valid psid, 
-		if (Cache.exists({discordId: {$eq:message.author.id}})) {
+		if (await Cache.exists({discordId: {$eq:message.author.id}})) {
+			// console.log(await Cache.exists({discordId: {$eq:message.author.id}}));
 			await message.reply(PUNT_TO_SERVER);
 			return;
 		}
 
 		// Check user's psid against API.
-		const psid = message.content.trim();
+		const userInput = message.content.trim();
 
-		if (!psidRegex.test(psid)) {
+		if (!userInputRegex.test(userInput)) {
 			await message.reply(INPUT_ERROR);
 			return;
 		}
 
-		const url = baseUrl + "contact/status?psid=" + psid;
-		const responseObj = await fetch(url, { method: 'GET'});
+		// Process Input
+		const [psid, givenEmail] = userInput.split(spacesRegex).filter(str => str.length > 0);
+		if (typeof psid !== "string" ||
+			typeof givenEmail !== "string" ||
+			!psidRegex.test(psid) || 
+			!emailRegex.test(givenEmail)) {
+			await message.reply(INPUT_ERROR);
+			return;
+		}
+
+		const statusRespObj = await getStatus(psid);
+		console.log("statusRespObj.status = " + statusRespObj.status);
 
 		// Bad credentials.
-		if (responseObj.status === 403) {
+		if (statusRespObj.status === 403) {
 			await message.reply(BAD_BOT_CREDS);
 			return;
 		}
 
 		// All other errors.
-		if (!handledStatusCodes.includes(responseObj.status)) {
+		if (!handledStatusCodes.includes(statusRespObj.status)) {
 			await message.reply(SOME_ERROR);
 			return;
 		}
 
 		// No record exists.
-		if (responseObj.status === 404) {
+		if (statusRespObj.status === 404) {
 			await message.reply(PIMP_COUGARCS);
 			await message.reply(NO_MEMBER_RECORD);
 			await message.reply(IF_THIS_IS_AN_ERROR);
@@ -93,8 +110,8 @@ client.on('message', async (message) => {
 		}
 
 		// Record exists.
-		if (responseObj.status === 200) {
-			const json = await responsObj.json();
+		if (statusRespObj.status === 200) {
+			const json = await statusRespObj.json();
 
 			// Not member.
 			if (json['member-status'] === false) {
@@ -107,11 +124,25 @@ client.on('message', async (message) => {
 			}
 			
 			// User is a member.
-			let cacheSuccess = false;
-			Cache.create({ discordId: message.author.id, psid: psid }, (err) => {
+
+			// Check to see if they submitted the correct email.
+			const actualEmail = await getEmail(psid);
+			if (actualEmail === undefined) {
+				await message.reply(SOME_ERROR);
+				return;
+			}
+			
+			console.log("actualEmail: " + actualEmail);
+			if (givenEmail.toLowerCase() !== actualEmail.toLowerCase()) {
+				await message.reply(USE_SAME_EMAIL);
+				return;
+			}
+
+			let cacheSuccess = true;
+			Cache.create({ discordId: message.author.id, psid: psid }, async (err) => {
 				if (err) {
 					await message.reply(SOME_ERROR);
-					cacheSuccess = true;
+					cacheSuccess = false;
 					return;
 				}
 			});
