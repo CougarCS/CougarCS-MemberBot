@@ -19,11 +19,11 @@ module.exports = {
     IF_THIS_IS_AN_ERROR: "If you feel this was an error, consider informing a CougarCS Officer of the issue.",
     BAD_BOT_CREDS: "My credentials are no longer valid. Please inform a CougarCS Officer to get this issue resolved!",
     SOME_ERROR: "Oops! Something went wrong. Please try again later.",
-    USE_SAME_EMAIL: "Please try again. Use the same email that you used to register for your CougarCS Membership.", 
+    USE_SAME_EMAIL: "Please try again. Enter the same email that you used when you registered for your CougarCS Membership.", 
     isNotMemberMessage: name => `Hey ${name}, we found you in our records, but we noticed you weren't a member. Consider joining CougarCS here: <https://www.cougarcs.com/register/>`,
     informOfficer: officerRole => `<@${officerRole.id}>, please add a role named \`Member\` to the server!`,
-    expiredMember: expiry => `According to our records, your membership expired on ${expiry["Term"]} of ${expiry["Year"]}.`,
-    ABOUT: `I was created in the Summer of 2021 by a gentlemen named Adil Iqbal. He has left a letter for you to read (privately). Use the \`${config.prefix}letter\` command to read it.`,
+    expiredMember: expiry => `According to our records, your most recent membership expiry is in the ${expiry["Term"]} of ${expiry["Year"]}.`,
+    ABOUT: `I was created in the Summer of 2021 by a gentlemen named Adil Iqbal. My purpose is to securely grant the \`Member\` role to Discord users that have a valid & current CougarCS Membership. To see what I can do for you, please use the \`${config.prefix}help\` command. I have also been given a letter for you from my creator. To read it, use the \`${config.prefix}letter\` command.`,
     LETTER_FROM_ME: 
     `\`\`\`
     Dear reader,
@@ -60,8 +60,8 @@ module.exports = {
 
     [1] At the time of this writing, the inflation rate has hit 5%,
         so I do not know if these numbers mean the same thing to you
-        as they did to me. The cost of the membership was $12. The
-        salary from the internship was $15,500 over 90 days.
+        as they did to me. The cost of the membership was $18. The
+        salary from the internship was $15,300 over 90 days.
     
     [2] The company I am talking about here is Bill.com. If you
         are a CS major, check them out! A lot of University of 
