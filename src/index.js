@@ -54,18 +54,16 @@ client.on('message', async (message) => {
 
 
 	if (message.channel.type == 'dm') {
+
 		// Check if user already submitted valid psid, 
 		if (Cache.exists({discordId: {$eq:message.author.id}})) {
-
-			// If so, send him off...
-			if (Cache.exists({discordId: {$eq:message.author.id}})) {
-				await message.reply(PUNT_TO_SERVER);
-				return;
-			}
+			await message.reply(PUNT_TO_SERVER);
+			return;
 		}
 
 		// Check user's psid against API.
 		const psid = message.content.trim();
+
 		if (!psidRegex.test(psid)) {
 			await message.reply(INPUT_ERROR);
 			return;
@@ -74,14 +72,15 @@ client.on('message', async (message) => {
 		const url = baseUrl + "contact/status?psid=" + psid;
 		const responseObj = await fetch(url, { method: 'GET'});
 
-		if (!handledStatusCodes.includes(responseObj.status)) {
-			await message.reply(SOME_ERROR);
-			return;
-		}
-
 		// Bad credentials.
 		if (responseObj.status === 403) {
 			await message.reply(BAD_BOT_CREDS);
+			return;
+		}
+
+		// All other errors.
+		if (!handledStatusCodes.includes(responseObj.status)) {
+			await message.reply(SOME_ERROR);
 			return;
 		}
 
@@ -95,14 +94,14 @@ client.on('message', async (message) => {
 
 		// Record exists.
 		if (responseObj.status === 200) {
-			const json = responsObj.json();
+			const json = await responsObj.json();
 
 			// Not member.
 			if (json['member-status'] === false) {
+				await message.reply(PIMP_COUGARCS);
 				await message.reply(isNotMemberMessage(json['Name']));
 				if (json["Membership End"] !== undefined) 
 					await message.reply(membershipExpiredOn(json['Membership End']));
-				await message.reply(PIMP_COUGARCS);
 				await message.reply(IF_THIS_IS_AN_ERROR);
 				return;
 			}
