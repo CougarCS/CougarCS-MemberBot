@@ -2,7 +2,6 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const mongoose = require("mongoose");
 const Cache = require("./cache");
-const fetch = require("node-fetch");
 const fs = require('fs');
 const { prefix, cougarcsServerIds } = require('./config.json');
 const { getStatus, getEmail, getToken } = require('./memberAPI');
@@ -38,6 +37,7 @@ for (const file of commandFiles) {
 
 client.once('ready', async () => {
 	await getToken();
+	console.log("Ready!");
 });
 
 client.on('message', async (message) => {
@@ -87,13 +87,12 @@ client.on('message', async (message) => {
 		}
 
 		const statusRespObj = await getStatus(psid);
-		console.log("statusRespObj.status = " + statusRespObj.status);
-
-		// Bad credentials.
-		if (statusRespObj.status === 403) {
-			await message.reply(BAD_BOT_CREDS);
+		if (statusRespObj === undefined) {
+			await message.reply(SOME_ERROR);
 			return;
 		}
+		
+		console.log("statusRespObj.status = " + statusRespObj.status);
 
 		// All other errors.
 		if (!handledStatusCodes.includes(statusRespObj.status)) {
