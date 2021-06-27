@@ -1,11 +1,10 @@
 {
 	"env": "dev",
     "prefix": "--",
+    "requestRetryLimit": 5,
     "superuserIds": [
         "593491742255218718",
         "403106061076267019"
     ],
-    "cougarcsServerIds": [
-
-    ]
+    "cougarcsServerIds": []
 }
