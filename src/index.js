@@ -2,7 +2,7 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
 const { prefix, cougarcsServerIds } = require('./config.json');
-const { getStatus, getEmail, getToken } = require('./memberAPI');
+const { getStatus, getEmail } = require('./memberAPI');
 const { spacesRegex, userInputRegex, psidRegex, emailRegex } = require('./regex');
 const { handledStatusCodes } = require('./util');
 const { 
