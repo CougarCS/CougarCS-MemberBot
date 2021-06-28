@@ -4,10 +4,12 @@ const CacheSchema = new mongoose.Schema({
 	discordId: {
 		type: String,
 		required: true,
+		unique: true,
 	},
 	psid: {
 		type: String,
 		required: true,
+		unique: true,
 	},
 });
 

@@ -1,10 +1,10 @@
 require('dotenv').config();
 const Discord = require('discord.js');
-const mongoose = require("mongoose");
-const Cache = require("./cache");
 const fs = require('fs');
 const { prefix, cougarcsServerIds } = require('./config.json');
 const { getStatus, getEmail, getToken } = require('./memberAPI');
+const { spacesRegex, userInputRegex, psidRegex, emailRegex } = require('./regex');
+const { handledStatusCodes } = require('./util');
 const { 
 	INPUT_ERROR, 
 	PUNT_TO_SERVER, 
@@ -13,19 +13,10 @@ const {
 	IF_THIS_IS_AN_ERROR, 
 	USE_CLAIM_IF_NOT_MEMBER,
 	PIMP_COUGARCS,
-	BAD_BOT_CREDS,
 	NO_MEMBER_RECORD,
 	USE_SAME_EMAIL,
 	isNotMemberMessage,
 } = require("./copy");
-
-const handledStatusCodes = [200, 404, 403];
-const spacesRegex = / +/;
-const psidRegex = /^\d{7}$/; 
-const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-const userInputRegex = /^\d{7} +[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -36,7 +27,7 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', async () => {
-	await getToken();
+	// await getToken();
 	console.log("Ready!");
 });
 

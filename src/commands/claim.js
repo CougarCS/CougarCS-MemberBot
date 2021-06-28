@@ -11,6 +11,7 @@ const {
 	PSID_PROMPT,
 	INPUT_EXAMPLE,
 	informOfficer } = require('../copy');  
+const { cacheExists } = require("../mongodb");
 
 module.exports = {
 	name: 'claim',
@@ -31,7 +32,7 @@ module.exports = {
 		}
 
 		// Check if user already in cache, if so, grant role and exit.
-		if (await Cache.exists({ discordId: { $eq : message.author.id } })) {
+		if (await cacheExists(message.author.id)) {
 			await message.member.roles.add(memberRole);
 			await message.reply(ALREADY_CLAIMED);
 			return;
