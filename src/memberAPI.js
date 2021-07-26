@@ -22,6 +22,8 @@ module.exports = {
         });
     
         if (responseObj.status != 200) {
+            const json = await responseObj.json()
+            console.log(JSON.stringify(json, null, 2));
             return undefined;
         }
     
@@ -85,5 +87,36 @@ module.exports = {
 
         const json = await responseObj.json();
         return await json["Email"];
+    },
+
+
+    getContactInfo: async (psid, retry = 0) => {
+        if (retry >= requestRetryLimit) {
+            return undefined;
+        }
+
+        const url = `${baseUrl}/contact?psid=${psid}`;
+    
+        const responseObj = await fetch(url, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${module.exports.token}`,
+                'Accept': 'application/json'
+            },
+        });
+    
+        console.log("getContactInfo responseObj.status = " + responseObj.status);
+
+        if (responseObj.status === 403 || responseObj.status == 401) {
+            const headers = await responseObj.headers;
+            console.log(headers);
+            await module.exports.getToken();
+            return await module.exports.getContactInfo(psid, retry + 1);
+        }
+
+        const json = await responseObj.json();
+        return await json;
     },
 };

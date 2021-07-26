@@ -28,7 +28,9 @@ module.exports = {
     expiredMember: expiry => `We’ve found you in our records, however it seems your membership ended ${expiry["Term"]} ${expiry["Year"]}. Consider renewing your membership at <https://www.cougarcs.com/register/>!`,
     informOfficer: officerRole => `<@${officerRole.id}>, please add a role named \`Member\` to the server!`,
     inviteToServer: inviteLink => `You're membership can also be used in this discord community: ${inviteLink}`,
+    notValidPsid: psid => `The value \`${psid}\` does not match the pattern for a PSID. A PSID is a 7 digit numeric value.`,
     memberRoleHasBeenRemoved: serverName => `Your \`Member\` role has been removed at the **${serverName}** discord server. Consider re-newing your CougarCS membership here: <https://www.cougarcs.com/register/>`,
+    apiResponse: jsonResp => `Here's the response from the member API: \`\`\`${JSON.stringify(jsonResp, null, 2)}\`\`\`\nIf the response looks funky, please let someone know!`,
     ABOUT: `I was created in the Summer of 2021 by a gentlemen named Adil Iqbal. My purpose is to securely grant the \`Member\` role to Discord users that have a valid & current CougarCS Membership. To see what I can do for you, please use the \`${config.prefix}help\` command. I have also been given a letter for you from my creator. To read it, use the \`${config.prefix}letter\` command.`,
     LETTER_FROM_ME_01: 
     `\`\`\`
@@ -64,7 +66,7 @@ module.exports = {
     \`\`\``,
     LETTER_FROM_ME_02:
     `\`\`\`
-    
+
     -- Footnotes --
 
     [1] At the time of this writing, the inflation rate has hit 5%,
