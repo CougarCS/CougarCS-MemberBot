@@ -23,7 +23,7 @@ module.exports = {
 		}
 
 		// Check if user has required roles.
-		if (!message.member.roles.cache.has(memberRole.id) || !message.author.roles.cache.has(officerRole.id)) {
+		if (!message.member.roles.cache.has(memberRole.id) || !message.member.roles.cache.has(officerRole.id)) {
 			await message.reply(NOT_ENOUGH_PYLONS);
 			return;
 		}
@@ -31,7 +31,7 @@ module.exports = {
 		// TODO: Add confirmation of some sort!
 		// TODO: ADD Generous Cooldown.
 
-		const cachedDate = await getCacheData();
+		const cachedData = await getCacheData();
 		for (const cache of cachedData) {
 
 			const { discordId, psid } = cache;

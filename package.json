@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint \"src/**\" --fix && eslint \"src/**\""
+    "lint": "eslint \"src/**\" --fix && eslint \"src/**\"",
+    "start": "npx nodemon src/index.js"
   },
   "repository": {
     "type": "git",

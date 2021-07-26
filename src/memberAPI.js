@@ -54,7 +54,7 @@ module.exports = {
 
         if (responseObj.status === 403) {
             await module.exports.getToken();
-            return await module.exports.getStatus(psid, retry + 1);
+            return await module.exports.getStatusOnly(psid, retry + 1);
         }
 
         const json = await responseObj.json();
