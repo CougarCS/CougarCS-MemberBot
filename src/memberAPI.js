@@ -29,9 +29,36 @@ module.exports = {
         module.exports.token = json.token;
         console.log(module.exports.token);
     },
-	getStatus: async (psid) => {
+
+	getStatus: async (psid, retry = 0) => {
+        if (retry >= requestRetryLimit) 
+            return undefined;
+
         const url = `${baseUrl}/contact/status?psid=${psid}`;
-        return await fetch(url, { method: 'GET', headers: {'Accept': 'application/json'}});
+        const responseObj = await fetch(url, { method: 'GET', headers: {'Accept': 'application/json'}});
+
+        if (responseObj.status === 403) {
+            await module.exports.getToken();
+            return await module.exports.getStatus(psid, retry + 1);
+        }
+
+        return responseObj;
+    },
+
+    getStatusOnly: async (psid, retry = 0) => {
+        if (retry >= requestRetryLimit) 
+            return undefined;
+
+        const url = `${baseUrl}/contact/status?psid=${psid}`;
+        const responseObj = await fetch(url, { method: 'GET', headers: {'Accept': 'application/json'}});
+
+        if (responseObj.status === 403) {
+            await module.exports.getToken();
+            return await module.exports.getStatus(psid, retry + 1);
+        }
+
+        const json = await responseObj.json();
+        return json['member-status'];
     },
 
     getEmail: async (psid, retry = 0) => {
