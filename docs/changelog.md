@@ -1,18 +1,30 @@
 # Change Log
 
-## Version 0.0.6 - 7/3/2021
+## Version 0.0.9 - 7/7/2021
+- The `whois` command has been implemented.
+- The `whois` command will now check for member & officer roles before executing.
+- The `whois` command will require a psid.
+- Member API will now retry if request returns 403 or 401 response.
+- Member API now has a retry limit.
+- Member API will now refresh token when attempting to retry.
+- Personal note: Everything has gone to shit. API is acting weird.
+
+## Version 0.0.8 - 7/3/2021
 - All mongodb queries are now properly asyncronous.
 - The `letter` command has been implemented.
-- 
+- Onboarding flow will no longer attempt to add member to server.
+- Onboarding flow will now send an invite link to member.
+- Onboarding flow is now stable for all 7 cases.
+- Onboarding flow will now qualify its ask.
+- Updated bot dialog to be more consistent.
+
 
 ## Version 0.0.6 - 6/26/2021
 - Onboarding flow will now check if user exists in cache.
 - Onboarding flow will now require email.
 - Onboarding flow will check email against PSID.
 - Onboarding flow will now distinguish between expired and never members.
-- Member API integration will attempt to retry before informing of error.
-- Member API retry behavior now has a retry limit.
-- Member API will now refresh token when retry limit is hit (though still inform error).
+
 
 ## Version 0.0.6 - 6/26/2021
 - Onboarding flow now exists.
