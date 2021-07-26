@@ -6,5 +6,11 @@
         "593491742255218718",
         "403106061076267019"
     ],
-    "cougarcsServerIds": []
+    "cougarcsServerIds": [
+        "755292015851208715"
+    ],
+    "cougarcsInviteLinks": {
+        "755292015851208715": ""
+    },
+    "omitChannels": []
 }

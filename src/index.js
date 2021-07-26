@@ -1,8 +1,8 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
-const { prefix, cougarcsServerIds } = require('./config.json');
-const { getStatus, getEmail } = require('./memberAPI');
+const { prefix, cougarcsServerIds, omitChannels, cougarcsInviteLinks} = require('./config.json');
+const { getStatus, getEmail, getToken } = require('./memberAPI');
 const { spacesRegex, userInputRegex, psidRegex, emailRegex } = require('./regex');
 const { handledStatusCodes } = require('./util');
 const { 
@@ -15,8 +15,15 @@ const {
 	PIMP_COUGARCS,
 	NO_MEMBER_RECORD,
 	USE_SAME_EMAIL,
-	isNotMemberMessage,
+	expiredMember,
+	specificGreeting,
+	NOT_A_MEMBER,
+	GENERIC_GREETING,
+	INPUT_EXAMPLE,
+	INPUT_TEMPLATE,
+	USE_OWN_DATA,
 } = require("./copy");
+const { cacheExists, createCache } = require('./mongodb');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -27,12 +34,12 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', async () => {
-	// await getToken();
+	await getToken();
 	console.log("Ready!");
 });
 
 client.on('message', async (message) => {
-	if (message.author.bot) return;
+	if (message.author.bot || omitChannels.includes(message.channel) || message.type != 'DEFAULT') return;
 	
 	if (message.content.startsWith(prefix)) {
 		const args = message.content.slice(prefix.length).trim().split(spacesRegex);
@@ -40,7 +47,7 @@ client.on('message', async (message) => {
 		if (!client.commands.has(command)) return;
 	
 		try {
-			client.commands.get(command).execute(message);
+			client.commands.get(command).execute(message, client);
 			return;
 		}
 		catch (error) {
@@ -53,8 +60,7 @@ client.on('message', async (message) => {
 	if (message.channel.type == 'dm') {
 
 		// Check if user already submitted valid psid, 
-		if (await Cache.exists({discordId: {$eq:message.author.id}})) {
-			// console.log(await Cache.exists({discordId: {$eq:message.author.id}}));
+		if (await cacheExists(message.author.id)) {
 			await message.reply(PUNT_TO_SERVER);
 			return;
 		}
@@ -64,6 +70,12 @@ client.on('message', async (message) => {
 
 		if (!userInputRegex.test(userInput)) {
 			await message.reply(INPUT_ERROR);
+			await message.reply(INPUT_EXAMPLE);
+			return;
+		}
+
+		if (userInput == INPUT_TEMPLATE) {
+			await message.reply(USE_OWN_DATA);
 			return;
 		}
 
@@ -93,7 +105,7 @@ client.on('message', async (message) => {
 
 		// No record exists.
 		if (statusRespObj.status === 404) {
-			await message.reply(PIMP_COUGARCS);
+			await message.reply(GENERIC_GREETING);
 			await message.reply(NO_MEMBER_RECORD);
 			await message.reply(IF_THIS_IS_AN_ERROR);
 			return;
@@ -105,15 +117,15 @@ client.on('message', async (message) => {
 
 			// Not member.
 			if (json['member-status'] === false) {
-				await message.reply(PIMP_COUGARCS);
-				await message.reply(isNotMemberMessage(json['Name']));
-				if (json["Membership End"] !== undefined) 
-					await message.reply(membershipExpiredOn(json['Membership End']));
+				await message.reply(specificGreeting(json['Name'].split(" ")[0]));
+				if (json["Membership Start"] === null) {
+					await message.reply(NOT_A_MEMBER); 
+				} else {
+					await message.reply(expiredMember(json['Membership End']));
+				}
 				await message.reply(IF_THIS_IS_AN_ERROR);
 				return;
 			}
-			
-			// User is a member.
 
 			// Check to see if they submitted the correct email.
 			const actualEmail = await getEmail(psid);
@@ -122,28 +134,30 @@ client.on('message', async (message) => {
 				return;
 			}
 
-			console.log("actualEmail: " + actualEmail);
 			if (givenEmail.toLowerCase() !== actualEmail.toLowerCase()) {
 				await message.reply(USE_SAME_EMAIL);
 				return;
 			}
 
-			let cacheSuccess = true;
-			Cache.create({ discordId: message.author.id, psid: psid }, async (err) => {
-				if (err) {
-					await message.reply(SOME_ERROR);
-					cacheSuccess = false;
-					return;
-				}
-			});
+			// ---- USER IS A MEMBER ----
+
+			// Create cached map of discord ID to PSID.
+			try {
+				await createCache(message.author.id, psid);
+			} catch (e) {
+				console.error(e);
+				await message.reply(SOME_ERROR);
+				return;
+			}
 
 			for (let serverId of cougarcsServerIds) {
 				const guild = client.guilds.cache.find(g => g.id === serverId);
 				if (guild === undefined) continue;
 
-				// Add user to CougarCS server if user isn't already.
+				// Invite user to CougarCS server if user isn't already a member.
 				if (!guild.members.cache.has(message.author.id)) {
-					guild.members.add(message.author.id);
+					await message.reply(inviteToServer(cougarcsInviteLinks[serverId]));
+					continue;
 				}
 
 				// Fetch member for server.
@@ -155,13 +169,12 @@ client.on('message', async (message) => {
 				if (memberRole === undefined) continue;
 
 				// Add member role if user doesn't have it already.
-				if ((await member.roles.cache.has(memberRole.id))) continue;
-				await member.addRole(memberRole.id);
+				if (member.roles.cache.has(memberRole.id)) continue;
+				await member.roles.add(memberRole);
 			}
 
 			await message.reply(IS_A_MEMBER);
-			if (cacheSuccess) await message.reply(USE_CLAIM_IF_NOT_MEMBER);
-			await message.reply(IF_THIS_IS_AN_ERROR);
+			await message.reply(USE_CLAIM_IF_NOT_MEMBER);
 			return;
 		}
 	}	

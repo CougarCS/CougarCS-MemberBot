@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A bot for adding member roles.",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"src/**\" --fix && eslint \"src/**\""
