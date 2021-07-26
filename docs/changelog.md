@@ -2,6 +2,7 @@
 
 ## Version 0.0.9 - 7/7/2021
 - The `whois` command has been implemented.
+- The `whois` command will allow officers to access member data on discord.
 - The `whois` command will now check for member & officer roles before executing.
 - The `whois` command will require a psid.
 - Member API will now retry if request returns 403 or 401 response.
