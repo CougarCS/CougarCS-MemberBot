@@ -10,6 +10,14 @@ The `claim` command can be used by anyone to acquire the \`Member\` role.
 
 The `flush` command can be used by anyone with the Officer role to remove the \`Member\` role from users whose membership has expired.
 
-**Note:** The `flush` command checks *all users with the \`Member\` role on all CougarCS discord servers* against the Member API to ensure that their membership is up-to-date. As such, it should be used sparingly.
+**Note:** The `flush` command checks *all users with the \`Member\` role on all CougarCS discord servers against the Member API to ensure that their membership is up-to-date. As such, it should be used sparingly.
 
-**Best Practice:** The `flush` command should be used once, ideally just before the beginning of each semester, to ensure that the \`Member\` role is assigned accurately.
+**Best Practice:** The `flush` command should be used once, ideally just before the beginning of each semester.
+
+**Best Practice:** The `flush` command should be used in a non-public channel.
+
+## The `whois` command
+
+The `whois` command can be used by anyone with the Officer role to access member information.
+
+**Best Practice:** The `whois` command should be used in a non-public channel to reduce exposure to personal information.

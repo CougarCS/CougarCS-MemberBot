@@ -1,6 +1,8 @@
 const config = require("./config.json");
 
 module.exports = {
+    OFFICER_ONLY_CHANNELS: "I can only reply to this command in Officer-only channels.",
+    WHO_IS_HELP: `I didn't understand. Use the command \`${config.prefix}help whois\` for more info.`,
     MEMBER_ROLE_DOES_NOT_EXIST: "A role named \`Member\` does not exist!",
     OFFICER_ROLE_DOES_NOT_EXIST: "A role named \`Officer\` does not exist!",
 	ALREADY_HAS_ROLE: 'You already have the \`Member\` role.',

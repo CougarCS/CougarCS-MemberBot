@@ -90,7 +90,7 @@ module.exports = {
     },
 
 
-    getContactInfo: async (psid, retry = 0) => {
+    getContactInfoByPsid: async (psid, retry = 0) => {
         if (retry >= requestRetryLimit) {
             return undefined;
         }
@@ -107,7 +107,7 @@ module.exports = {
             },
         });
     
-        console.log("getContactInfo responseObj.status = " + responseObj.status);
+        console.log("getContactInfoByPsid responseObj.status = " + responseObj.status);
 
         if (responseObj.status === 403 || responseObj.status == 401) {
             const headers = await responseObj.headers;

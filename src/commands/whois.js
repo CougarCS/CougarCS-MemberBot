@@ -1,13 +1,20 @@
 const { fetchRoles } = require("../util");
-const { MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, SOME_ERROR, apiResponse, notValidPsid } = require("../copy");
+const { WHO_IS_HELP, OFFICER_ONLY_CHANNELS, MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, SOME_ERROR, apiResponse, notValidPsid } = require("../copy");
 const { psidRegex } = require("../regex");
-const { getContactInfo } = require("../memberAPI");
+const { getContactInfoByPsid } = require("../memberAPI");
+const { officerChannels } = require("../config.json");
 
 module.exports = {
 	name: 'whois',
 	superuser: true,
 	description: '(officers only) lookup person by PSID.',
 	async execute(message, client, args) {
+		
+		// Check if command was sent in an approved channel.
+		if (!officerChannels.includes(message.channel.id)) {
+			await message.reply(OFFICER_ONLY_CHANNELS);
+			return;
+		}
 
 		// Check if roles exist.
 		const [memberRole, officerRole] = await fetchRoles(message);
@@ -16,7 +23,6 @@ module.exports = {
 			if (officerRole) await message.channel.send(informOfficer(officerRole));
 			return;
 		}
-
 		if (officerRole === undefined) {
 			await message.reply(OFFICER_ROLE_DOES_NOT_EXIST);
 			return;
@@ -28,17 +34,19 @@ module.exports = {
 			return;
 		}
 
-		if (!psidRegex.test(args[0])) {
-			await message.reply(notValidPsid(args[0]));
+		if (psidRegex.test(args[0])) {
+			const resp = await getContactInfoByPsid(args[0]);
+			if (resp == undefined) {
+				await message.reply(SOME_ERROR);
+				return;
+			}
+			await message.reply(apiResponse(resp));
 			return;
 		}
 
-		const resp = await getContactInfo(args[0]);
-		if (resp == undefined) {
-			await message.reply(SOME_ERROR);
-			return;
-		}
 
-		await message.author.send(apiResponse(resp));
+		await message.reply(WHO_IS_HELP);
+		return;
+		
 	},
 };
