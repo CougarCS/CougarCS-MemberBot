@@ -1,10 +1,11 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
-const { prefix, cougarcsServerIds, omitChannels, cougarcsInviteLinks} = require('./config.json');
+const { prefix, cougarcsServerIds, omitChannels, cougarcsInviteLinks, env} = require('./config.json');
 const { getStatus, getEmail, getToken } = require('./memberAPI');
 const { spacesRegex, userInputRegex, psidRegex, emailRegex } = require('./regex');
 const { handledStatusCodes } = require('./util');
+const { truncate } = require('lodash/truncate');
 const { 
 	INPUT_ERROR, 
 	PUNT_TO_SERVER, 
@@ -39,6 +40,7 @@ client.once('ready', async () => {
 });
 
 client.on('message', async (message) => {
+	try {
 	if (message.author.bot || omitChannels.includes(message.channel) || message.type != 'DEFAULT') return;
 	
 	if (message.content.startsWith(prefix)) {
@@ -177,7 +179,16 @@ client.on('message', async (message) => {
 			await message.reply(USE_CLAIM_IF_NOT_MEMBER);
 			return;
 		}
-	}	
+	}
+} catch (e) {
+	if (env == "prod") {
+		await message.reply(SOME_ERROR);
+		return;
+	} else {
+		await message.reply(`\`\`\`${truncate(e, { length: 1500 })}\`\`\``);
+		return;
+	}
+}	
 });
 
 client.login(process.env.TOKEN);

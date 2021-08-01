@@ -108,15 +108,16 @@ module.exports = {
         });
     
         console.log("getContactInfoByPsid responseObj.status = " + responseObj.status);
+        const headers = await responseObj.headers;
+        console.log("getContactInfoByPsid response headers: " + JSON.stringify(headers, null, 4));
+        const json = await responseObj.json();
+        console.log("getContactInfoByPsid response body: " + JSON.stringify(json, null, 4));
 
         if (responseObj.status === 403 || responseObj.status == 401) {
-            const headers = await responseObj.headers;
-            console.log(headers);
             await module.exports.getToken();
-            return await module.exports.getContactInfo(psid, retry + 1);
+            return await module.exports.getContactInfoByPsid(psid, retry + 1);
         }
 
-        const json = await responseObj.json();
         return await json;
     },
 };

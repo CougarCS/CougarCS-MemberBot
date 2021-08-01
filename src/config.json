@@ -2,10 +2,6 @@
 	"env": "dev",
     "prefix": "--",
     "requestRetryLimit": 5,
-    "superuserIds": [
-        "593491742255218718",
-        "403106061076267019"
-    ],
     "cougarcsServerIds": [
         "755292015851208715"
     ],
@@ -13,5 +9,16 @@
         "755292015851208715": ""
     },
     "omitChannels": [],
-    "officerChannels": []
+    "officerChannels": [
+        "871445520076402688"
+    ],
+    "_comment": {
+        "env": "A 'dev' value push any errors to discord. A 'prod' value will push generic error message to discord",
+        "prefix": "command prefix.",
+        "requestRetryLimit": "member api requests will retry this many times before giving up.",
+        "cougarcsServerIds": "servers that will run the bot",
+        "cougarcsInviteLinks": "invite links mapped to each server. Links must have no limit and never expire.",
+        "ommitChannels": "bot will be inactive in these discord channels.",
+        "officerChannels": "officer commands may give out personal information. these channels should not be public."
+    }
 }
