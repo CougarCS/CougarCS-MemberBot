@@ -54,7 +54,7 @@ module.exports = {
         const url = `${baseUrl}/contact/status?psid=${psid}`;
         const responseObj = await fetch(url, { method: 'GET', headers: {'Accept': 'application/json'}});
 
-        if (responseObj.status === 403) {
+        if (responseObj.status === 401 || responseObj.status === 403) {
             await module.exports.getToken();
             return await module.exports.getStatusOnly(psid, retry + 1);
         }
@@ -116,6 +116,37 @@ module.exports = {
         if (responseObj.status === 403 || responseObj.status == 401) {
             await module.exports.getToken();
             return await module.exports.getContactInfoByPsid(psid, retry + 1);
+        }
+
+        return await json;
+    },
+
+    getContactInfoByEmail: async (email, retry = 0) => {
+        if (retry >= requestRetryLimit) {
+            return undefined;
+        }
+
+        const url = `${baseUrl}/contact?email=${email}`;
+    
+        const responseObj = await fetch(url, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${module.exports.token}`,
+                'Accept': 'application/json'
+            },
+        });
+    
+        console.log("getContactInfoByEmail status: " + responseObj.status);
+        const headers = await responseObj.headers;
+        console.log("getContactInfoByEmail response headers: " + JSON.stringify(headers, null, 4));
+        const json = await responseObj.json();
+        console.log("getContactInfoByEmail response body: " + JSON.stringify(json, null, 4));
+
+        if (responseObj.status === 403 || responseObj.status == 401) {
+            await module.exports.getToken();
+            return await module.exports.getContactInfoByEmail(email, retry + 1);
         }
 
         return await json;

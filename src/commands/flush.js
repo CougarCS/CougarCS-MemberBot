@@ -3,22 +3,30 @@ const { MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLO
 const { getCacheData, deleteCache } = require("../mongodb");
 const { getStatusOnly } = require("../memberAPI");
 const { cougarcsServerIds } = require("../config.json");
+const { officerChannels } = require('../config.json');
 
 module.exports = {
 	name: 'flush',
 	superuser: true,
 	description: 'remove expired roles.',
 	async execute(message, client) {
-		// Check if roles exist.
-		const [memberRole, officerRole] = await fetchRoles(message);
-		if (memberRole === undefined) {
-			await message.reply(MEMBER_ROLE_DOES_NOT_EXIST);
-			if (officerRole) await message.channel.send(informOfficer(officerRole));
+		// Check if command was sent in an approved channel.
+		if (!officerChannels.includes(message.channel.id)) {
+			await message.reply(OFFICER_ONLY_CHANNELS);
 			return;
 		}
 
+		// Check if roles exist.
+		const [memberRole, officerRole] = await fetchRoles(message);
+
 		if (officerRole === undefined) {
 			await message.reply(OFFICER_ROLE_DOES_NOT_EXIST);
+			return;
+		}
+
+		if (memberRole === undefined) {
+			await message.reply(MEMBER_ROLE_DOES_NOT_EXIST);
+			if (officerRole) await message.channel.send(informOfficer(officerRole));
 			return;
 		}
 

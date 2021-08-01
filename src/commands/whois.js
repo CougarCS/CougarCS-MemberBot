@@ -1,7 +1,7 @@
 const { fetchRoles } = require("../util");
-const { WHO_IS_HELP, OFFICER_ONLY_CHANNELS, MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, SOME_ERROR, apiResponse, notValidPsid } = require("../copy");
-const { psidRegex } = require("../regex");
-const { getContactInfoByPsid } = require("../memberAPI");
+const { WHO_IS_HELP, OFFICER_ONLY_CHANNELS, MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, SOME_ERROR, apiResponse } = require("../copy");
+const { psidRegex, emailRegex } = require("../regex");
+const { getContactInfoByPsid, getContactInfoByEmail } = require("../memberAPI");
 const { officerChannels } = require("../config.json");
 
 module.exports = {
@@ -44,6 +44,15 @@ module.exports = {
 			return;
 		}
 
+		if (emailRegex.test(args[0])) {
+			const resp = await getContactInfoByEmail(args[0]);
+			if (resp == undefined) {
+				await message.reply(SOME_ERROR);
+				return;
+			}
+			await message.reply(apiResponse(resp));
+			return;
+		}
 
 		await message.reply(WHO_IS_HELP);
 		return;

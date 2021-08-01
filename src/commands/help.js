@@ -1,12 +1,12 @@
-const { LETTER_FROM_ME_01, LETTER_FROM_ME_02} = require('../copy'); 
+const { prefix } = require('../config.json');
 
 module.exports = {
-	name: 'letter',
-	description: 'my creator left a letter for you to read.',
+	name: 'help',
+	description: 'info on all of my commands.',
 	async execute(message, args) {
         const data = [];
 		const { commands } = message.client;
-        
+
 		if (!args.length) {
             data.push('Here\'s a list of all my commands:');
             data.push(commands.map(command => command.name).join(', '));
