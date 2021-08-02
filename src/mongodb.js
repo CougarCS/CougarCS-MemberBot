@@ -12,6 +12,7 @@ module.exports = {
     cacheExists: async (givenDiscordId) => Cache.exists({ discordId : { $eq: givenDiscordId }}),
     createCache: async (givenDiscordId, givenPsid) => new Cache({ discordId: givenDiscordId, psid: givenPsid }).save(),
     getCacheData: async () => Cache.find({}),
+    getOneCacheByPsid: async (givenPsid) => Cache.findOne({psid: { $eq: givenPsid }}),
     deleteCache: async (givenPsid) => Cache.deleteOne({ psid: { $eq: givenPsid }}),
     deleteCacheByDiscordId: async (givenDiscordId) => Cache.deleteOne({ discordId: { $eq: givenDiscordId }}),
 }

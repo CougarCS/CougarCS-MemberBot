@@ -1,8 +1,16 @@
 const { fetchRoles } = require("../util");
-const { WHO_IS_HELP, OFFICER_ONLY_CHANNELS, MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, SOME_ERROR, apiResponse } = require("../copy");
+const { 
+	WHO_IS_HELP, 
+	OFFICER_ONLY_CHANNELS, 
+	MEMBER_ROLE_DOES_NOT_EXIST, 
+	OFFICER_ROLE_DOES_NOT_EXIST, 
+	NOT_ENOUGH_PYLONS, SOME_ERROR, 
+	apiResponse, 
+	NOT_IN_CACHE } = require("../copy");
 const { psidRegex, emailRegex } = require("../regex");
 const { getContactInfoByPsid, getContactInfoByEmail } = require("../memberAPI");
 const { officerChannels } = require("../config.json");
+const { getOneCacheByPsid } = require("../mongodb");
 
 module.exports = {
 	name: 'whois',
@@ -41,6 +49,13 @@ module.exports = {
 				return;
 			}
 			await message.reply(apiResponse(resp));
+			try {
+				cacheResp = await getOneCacheByPsid(args[0]);
+				await message.reply(apiResponse(cacheResp));
+			} catch (e) {
+				await message.reply(NOT_IN_CACHE);
+				console.error(e);
+			}
 			return;
 		}
 
