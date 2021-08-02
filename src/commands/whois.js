@@ -5,7 +5,9 @@ const {
 	MEMBER_ROLE_DOES_NOT_EXIST, 
 	OFFICER_ROLE_DOES_NOT_EXIST, 
 	NOT_ENOUGH_PYLONS, SOME_ERROR, 
-	apiResponse, 
+	apiResponse,
+	cacheResponse,
+	LOOKS_FUNKY,
 	NOT_IN_CACHE } = require("../copy");
 const { psidRegex, emailRegex } = require("../regex");
 const { getContactInfoByPsid, getContactInfoByEmail } = require("../memberAPI");
@@ -51,11 +53,12 @@ module.exports = {
 			await message.reply(apiResponse(resp));
 			try {
 				cacheResp = await getOneCacheByPsid(args[0]);
-				await message.reply(apiResponse(cacheResp));
+				await message.reply(cacheResponse(cacheResp));
 			} catch (e) {
 				await message.reply(NOT_IN_CACHE);
 				console.error(e);
 			}
+			await message.reply(LOOKS_FUNKY);
 			return;
 		}
 

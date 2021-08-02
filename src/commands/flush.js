@@ -1,5 +1,5 @@
 const { fetchRoles } = require("../util");
-const { MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, memberRoleHasBeenRemoved } = require("../copy");
+const { MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, memberRoleHasBeenRemoved, memberRoleHasBeenRemovedFromUser } = require("../copy");
 const { getCacheData, deleteCache } = require("../mongodb");
 const { getStatusOnly } = require("../memberAPI");
 const { cougarcsServerIds } = require("../config.json");
@@ -10,6 +10,7 @@ module.exports = {
 	superuser: true,
 	description: 'remove expired roles.',
 	async execute(message, client, args) {
+
 		// Check if command was sent in an approved channel.
 		if (!officerChannels.includes(message.channel.id)) {
 			await message.reply(OFFICER_ONLY_CHANNELS);
@@ -36,9 +37,6 @@ module.exports = {
 			return;
 		}
 
-		// TODO: Add confirmation of some sort!
-		// TODO: ADD Generous Cooldown.
-
 		const cachedData = await getCacheData();
 		for (const cache of cachedData) {
 
@@ -56,13 +54,16 @@ module.exports = {
 				if (member === undefined) continue;
 				
 				// Fetch memberRole for server.
-				const memberRole = guild.roles.cache.find(r => r.name.toLowerCase() === "member");
-				if (memberRole === undefined) continue;
+				const guildMemberRole = guild.roles.cache.find(r => r.name.toLowerCase() === "member");
+				if (guildMemberRole === undefined) continue;
 
 				// If member has member role, then remove it.
-				if (!member.roles.cache.has(memberRole.id)) continue;
-				await member.roles.remove(memberRole);
-				await member.send(memberRoleHasBeenRemoved(guild.name));
+				if (!member.roles.cache.has(guildMemberRole.id)) continue;
+				await member.roles.remove(guildMemberRole);
+				await message.reply(memberRoleHasBeenRemovedFromUser(member.id));
+				try {
+					await member.send(memberRoleHasBeenRemoved(guild.name));
+				} catch (e) {};
 			}
 
 			await deleteCache(psid);
