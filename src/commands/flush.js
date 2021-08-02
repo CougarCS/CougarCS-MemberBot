@@ -1,5 +1,5 @@
 const { fetchRoles } = require('../util');
-const { MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, memberRoleHasBeenRemoved, memberRoleHasBeenRemovedFromUser } = require('../copy');
+const { MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, OFFICER_ONLY_CHANNELS, informOfficer, memberRoleHasBeenRemoved, memberRoleHasBeenRemovedFromUser } = require('../copy');
 const { getCacheData, deleteCache } = require('../mongodb');
 const { getStatusOnly } = require('../memberAPI');
 const { cougarcsServerIds } = require('../config.json');

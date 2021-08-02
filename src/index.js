@@ -13,18 +13,19 @@ const {
 	SOME_ERROR,
 	IF_THIS_IS_AN_ERROR,
 	USE_CLAIM_IF_NOT_MEMBER,
-	PIMP_COUGARCS,
 	NO_MEMBER_RECORD,
 	USE_SAME_EMAIL,
 	expiredMember,
 	specificGreeting,
+	inviteToServer,
 	NOT_A_MEMBER,
 	GENERIC_GREETING,
 	INPUT_EXAMPLE,
 	INPUT_TEMPLATE,
 	USE_OWN_DATA,
+	PSID_IS_TAKEN,
 } = require('./copy');
-const { cacheExists, createCache } = require('./mongodb');
+const { cacheExists, createCache, cacheExistsByPsid } = require('./mongodb');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -139,6 +140,20 @@ client.on('message', async (message) => {
 
 				if (givenEmail.toLowerCase() !== actualEmail.toLowerCase()) {
 					await message.reply(USE_SAME_EMAIL);
+					return;
+				}
+
+				// Check for any collisions!
+
+				try {
+					if (await cacheExistsByPsid(psid)) {
+						await message.reply(PSID_IS_TAKEN);
+						await message.reply(IF_THIS_IS_AN_ERROR);
+						return;
+					}
+				}
+				catch (e) {
+					await message.reply(SOME_ERROR);
 					return;
 				}
 

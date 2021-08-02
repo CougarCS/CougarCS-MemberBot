@@ -7,6 +7,7 @@ const {
 	NOT_ENOUGH_PYLONS, SOME_ERROR,
 	apiResponse,
 	cacheResponse,
+	informOfficer,
 	LOOKS_FUNKY,
 	NOT_IN_CACHE } = require('../copy');
 const { psidRegex, emailRegex } = require('../regex');
@@ -52,7 +53,7 @@ module.exports = {
 			}
 			await message.reply(apiResponse(resp));
 			try {
-				cacheResp = await getOneCacheByPsid(args[0]);
+				const cacheResp = await getOneCacheByPsid(args[0]);
 				await message.reply(cacheResponse(cacheResp));
 			}
 			catch (e) {

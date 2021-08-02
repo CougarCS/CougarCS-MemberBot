@@ -1,6 +1,7 @@
 const config = require('./config.json');
 
 module.exports = {
+	PSID_IS_TAKEN: 'It seems like that PSID is already taken. Either you have multiple accounts or there are shenanigans abound!',
 	LOOKS_FUNKY: 'If anything looks funky, please let someone know!',
 	memberRoleHasBeenRemovedFromUser: userId => `Member role has been removed from user <@${userId}>.`,
 	userHasBeenForgotten: userId => `User <@${userId}> has been erased from memory.`,

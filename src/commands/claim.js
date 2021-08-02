@@ -1,7 +1,4 @@
 const { fetchRoles } = require('../util');
-const Cache = require('../cache');
-const mongoose = require('mongoose');
-const { DiscordAPIError } = require('discord.js');
 const {
 	ALREADY_HAS_ROLE,
 	ALREADY_CLAIMED,
