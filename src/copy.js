@@ -1,8 +1,12 @@
 const config = require("./config.json");
 
 module.exports = {
+    memberRoleHasBeenRemovedFromUser: userId => `Member role has been removed from user <@${userId}>.`,
+    userHasBeenForgotten: userId => `User <@${userId}> has been erased from memory.`,
+    userNotInCache: userId => `I do not remember <@${userId}>.`,
+    GENERIC_MEMBER_ROLE_REMOVED: "Your member role has been removed",
     NOT_IN_CACHE: "I don't remember you.",
-    YOU_HAVE_BEEN_FORGOTTEN: "You have been forgotten.",
+    YOU_HAVE_BEEN_FORGOTTEN: "You have been erased from my memory.",
     COULD_NOT_SEND_DM: "Please make sure your DM's are enabled and try again.",
     OFFICER_ONLY_CHANNELS: "I can only reply to this command in Officer-only channels.",
     WHO_IS_HELP: `I didn't understand. Use the command \`${config.prefix}help whois\` for more info.`,

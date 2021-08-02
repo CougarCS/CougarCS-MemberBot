@@ -9,7 +9,7 @@ module.exports = {
 	name: 'flush',
 	superuser: true,
 	description: 'remove expired roles.',
-	async execute(message, client) {
+	async execute(message, client, args) {
 		// Check if command was sent in an approved channel.
 		if (!officerChannels.includes(message.channel.id)) {
 			await message.reply(OFFICER_ONLY_CHANNELS);

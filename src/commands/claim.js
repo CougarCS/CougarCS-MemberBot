@@ -6,19 +6,27 @@ const {
 	ALREADY_HAS_ROLE, 
 	ALREADY_CLAIMED, 
 	PUNT_TO_DM, 
-	MEMBER_ROLE_DOES_NOT_EXIST, 
+	MEMBER_ROLE_DOES_NOT_EXIST,
+	OFFICER_ROLE_DOES_NOT_EXIST,
 	PSID_PROMPT_QUALIFIER, 
 	PSID_PROMPT,
 	INPUT_EXAMPLE,
+	COULD_NOT_SEND_DM,
 	informOfficer } = require('../copy');  
 const { cacheExists } = require("../mongodb");
 
 module.exports = {
 	name: 'claim',
 	description: 'use to claim your Membership role.',
-	async execute(message) {
+	async execute(message, client, args) {
 		// Check if member role exists. If not, shout out to an officer.
 		const [memberRole, officerRole] = await fetchRoles(message);
+
+		if (officerRole === undefined) {
+			await message.reply(OFFICER_ROLE_DOES_NOT_EXIST);
+			return;
+		}
+
 		if (memberRole === undefined) {
 			await message.reply(MEMBER_ROLE_DOES_NOT_EXIST);
 			if (officerRole) await message.channel.send(informOfficer(officerRole));
@@ -39,9 +47,13 @@ module.exports = {
 		}
 
 		// Otherwise, send DM for PSID and exit.
-		await message.reply(PUNT_TO_DM);
-		await message.author.send(PSID_PROMPT_QUALIFIER);
-		await message.author.send(PSID_PROMPT);
-		await message.author.send(INPUT_EXAMPLE);
+		try {
+			await message.author.send(PSID_PROMPT_QUALIFIER);
+			await message.author.send(PSID_PROMPT);
+			await message.author.send(INPUT_EXAMPLE);
+			await message.reply(PUNT_TO_DM);
+		} catch (e) {
+			await message.reply(COULD_NOT_SEND_DM);
+		}
 	},
 };

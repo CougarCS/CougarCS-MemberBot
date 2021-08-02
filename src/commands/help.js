@@ -3,7 +3,7 @@ const { prefix } = require('../config.json');
 module.exports = {
 	name: 'help',
 	description: 'info on all of my commands.',
-	async execute(message, args) {
+	async execute(message, client, args) {
         const data = [];
 		const { commands } = message.client;
 
