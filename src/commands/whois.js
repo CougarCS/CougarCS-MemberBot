@@ -1,25 +1,25 @@
-const { fetchRoles } = require("../util");
-const { 
-	WHO_IS_HELP, 
-	OFFICER_ONLY_CHANNELS, 
-	MEMBER_ROLE_DOES_NOT_EXIST, 
-	OFFICER_ROLE_DOES_NOT_EXIST, 
-	NOT_ENOUGH_PYLONS, SOME_ERROR, 
+const { fetchRoles } = require('../util');
+const {
+	WHO_IS_HELP,
+	OFFICER_ONLY_CHANNELS,
+	MEMBER_ROLE_DOES_NOT_EXIST,
+	OFFICER_ROLE_DOES_NOT_EXIST,
+	NOT_ENOUGH_PYLONS, SOME_ERROR,
 	apiResponse,
 	cacheResponse,
 	LOOKS_FUNKY,
-	NOT_IN_CACHE } = require("../copy");
-const { psidRegex, emailRegex } = require("../regex");
-const { getContactInfoByPsid, getContactInfoByEmail } = require("../memberAPI");
-const { officerChannels } = require("../config.json");
-const { getOneCacheByPsid } = require("../mongodb");
+	NOT_IN_CACHE } = require('../copy');
+const { psidRegex, emailRegex } = require('../regex');
+const { getContactInfoByPsid, getContactInfoByEmail } = require('../memberAPI');
+const { officerChannels } = require('../config.json');
+const { getOneCacheByPsid } = require('../mongodb');
 
 module.exports = {
 	name: 'whois',
 	superuser: true,
 	description: '(officers only) lookup person by PSID.',
 	async execute(message, client, args) {
-		
+
 		// Check if command was sent in an approved channel.
 		if (!officerChannels.includes(message.channel.id)) {
 			await message.reply(OFFICER_ONLY_CHANNELS);
@@ -54,7 +54,8 @@ module.exports = {
 			try {
 				cacheResp = await getOneCacheByPsid(args[0]);
 				await message.reply(cacheResponse(cacheResp));
-			} catch (e) {
+			}
+			catch (e) {
 				await message.reply(NOT_IN_CACHE);
 				console.error(e);
 			}
@@ -74,6 +75,6 @@ module.exports = {
 
 		await message.reply(WHO_IS_HELP);
 		return;
-		
+
 	},
 };

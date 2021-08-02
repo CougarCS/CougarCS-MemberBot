@@ -1,19 +1,19 @@
-const { fetchRoles } = require("../util");
+const { fetchRoles } = require('../util');
 const Cache = require('../cache');
 const mongoose = require('mongoose');
 const { DiscordAPIError } = require('discord.js');
-const { 
-	ALREADY_HAS_ROLE, 
-	ALREADY_CLAIMED, 
-	PUNT_TO_DM, 
+const {
+	ALREADY_HAS_ROLE,
+	ALREADY_CLAIMED,
+	PUNT_TO_DM,
 	MEMBER_ROLE_DOES_NOT_EXIST,
 	OFFICER_ROLE_DOES_NOT_EXIST,
-	PSID_PROMPT_QUALIFIER, 
+	PSID_PROMPT_QUALIFIER,
 	PSID_PROMPT,
 	INPUT_EXAMPLE,
 	COULD_NOT_SEND_DM,
-	informOfficer } = require('../copy');  
-const { cacheExists } = require("../mongodb");
+	informOfficer } = require('../copy');
+const { cacheExists } = require('../mongodb');
 
 module.exports = {
 	name: 'claim',
@@ -52,7 +52,8 @@ module.exports = {
 			await message.author.send(PSID_PROMPT);
 			await message.author.send(INPUT_EXAMPLE);
 			await message.reply(PUNT_TO_DM);
-		} catch (e) {
+		}
+		catch (e) {
 			await message.reply(COULD_NOT_SEND_DM);
 		}
 	},

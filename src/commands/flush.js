@@ -1,8 +1,8 @@
-const { fetchRoles } = require("../util");
-const { MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, memberRoleHasBeenRemoved, memberRoleHasBeenRemovedFromUser } = require("../copy");
-const { getCacheData, deleteCache } = require("../mongodb");
-const { getStatusOnly } = require("../memberAPI");
-const { cougarcsServerIds } = require("../config.json");
+const { fetchRoles } = require('../util');
+const { MEMBER_ROLE_DOES_NOT_EXIST, OFFICER_ROLE_DOES_NOT_EXIST, NOT_ENOUGH_PYLONS, memberRoleHasBeenRemoved, memberRoleHasBeenRemovedFromUser } = require('../copy');
+const { getCacheData, deleteCache } = require('../mongodb');
+const { getStatusOnly } = require('../memberAPI');
+const { cougarcsServerIds } = require('../config.json');
 const { officerChannels } = require('../config.json');
 
 module.exports = {
@@ -43,8 +43,8 @@ module.exports = {
 			const { discordId, psid } = cache;
 			const status = await getStatusOnly(discordId);
 			if (status) continue;
-			
-			for (let serverId of cougarcsServerIds) {
+
+			for (const serverId of cougarcsServerIds) {
 				// Fetch server.
 				const guild = client.guilds.cache.find(g => g.id === serverId);
 				if (guild === undefined) continue;
@@ -52,9 +52,9 @@ module.exports = {
 				// Fetch member for server.
 				const member = guild.members.cache.find(m => m.id === discordId);
 				if (member === undefined) continue;
-				
+
 				// Fetch memberRole for server.
-				const guildMemberRole = guild.roles.cache.find(r => r.name.toLowerCase() === "member");
+				const guildMemberRole = guild.roles.cache.find(r => r.name.toLowerCase() === 'member');
 				if (guildMemberRole === undefined) continue;
 
 				// If member has member role, then remove it.
@@ -63,7 +63,8 @@ module.exports = {
 				await message.reply(memberRoleHasBeenRemovedFromUser(member.id));
 				try {
 					await member.send(memberRoleHasBeenRemoved(guild.name));
-				} catch (e) {};
+				}
+				catch (e) {}
 			}
 
 			await deleteCache(psid);

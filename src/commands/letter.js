@@ -1,4 +1,4 @@
-const { LETTER_FROM_ME_01, LETTER_FROM_ME_02, COULD_NOT_SEND_DM } = require('../copy'); 
+const { LETTER_FROM_ME_01, LETTER_FROM_ME_02, COULD_NOT_SEND_DM } = require('../copy');
 
 module.exports = {
 	name: 'letter',
@@ -7,7 +7,8 @@ module.exports = {
 		try {
 			await message.author.send(LETTER_FROM_ME_01);
 			await message.author.send(LETTER_FROM_ME_02);
-		} catch (e) {
+		}
+		catch (e) {
 			await message.reply(COULD_NOT_SEND_DM);
 		}
 	},
