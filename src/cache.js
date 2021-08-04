@@ -11,7 +11,7 @@ const CacheSchema = new mongoose.Schema({
 		required: true,
 		unique: true,
 	},
-});
+}, { timestamps: true });
 
 const Cache = mongoose.model('Cache', CacheSchema);
 module.exports = Cache;

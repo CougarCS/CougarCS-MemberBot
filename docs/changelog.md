@@ -1,5 +1,20 @@
 # Change Log
 
+## Version 0.0.12 - 8/1/2021
+- The `whois` command now takes email as an argument.
+- The `whois` command will now return cache data if used with PSID.
+- The `whois` command is limited to officer channels.
+- Officer channels have been implemented.
+- The `forget` command can now be used to remove oneself from cache.
+- The `forget` command can now be used by officers with mentions to remove users from the cache.
+- The `forget` command now checks for Officer and member roles when executing.
+- The Onboard flow now has better error handling.
+- The Onboard flow now checks for PSID collisions.
+- The `ping` command has been removed.
+- The `test` command has been removed.
+- The `letter command now correctly splits letter for viewing.
+- All commands now correctly check for Officer role before checking for Member role.
+
 ## Version 0.0.9 - 7/7/2021
 - The `whois` command has been implemented.
 - The `whois` command will allow officers to access member data on discord.

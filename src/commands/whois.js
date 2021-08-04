@@ -1,4 +1,4 @@
-const { fetchRoles } = require('../util');
+const { fetchRoles, getUserFromMention, getUserIdFromMention } = require('../util');
 const {
 	WHO_IS_HELP,
 	OFFICER_ONLY_CHANNELS,
@@ -7,6 +7,7 @@ const {
 	NOT_ENOUGH_PYLONS, SOME_ERROR,
 	apiResponse,
 	cacheResponse,
+	discordResponse,
 	informOfficer,
 	LOOKS_FUNKY,
 	NOT_IN_CACHE } = require('../copy');
@@ -55,11 +56,23 @@ module.exports = {
 			try {
 				const cacheResp = await getOneCacheByPsid(args[0]);
 				await message.reply(cacheResponse(cacheResp));
+				const user = await getUserFromMention(client, cacheResp.discordId);
+				console.log('User: ' + JSON.stringify(user, null, 4));
+				if (user) {
+					const data = {
+						id: getUserIdFromMention(user.id),
+						username: user.username,
+						discriminator: user.discriminator,
+					};
+					await message.reply(discordResponse(data));
+				}
+				return;
 			}
 			catch (e) {
 				await message.reply(NOT_IN_CACHE);
 				console.error(e);
 			}
+
 			await message.reply(LOOKS_FUNKY);
 			return;
 		}

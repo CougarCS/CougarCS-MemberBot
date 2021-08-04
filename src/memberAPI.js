@@ -75,14 +75,17 @@ module.exports = {
 			},
 		});
 
-		console.log('getEmail responseObj.status = ' + responseObj.status);
+		console.log('getEmail status: ' + responseObj.status);
+		const headers = await responseObj.headers;
+		console.log('getEmail response headers: ' + JSON.stringify(headers, null, 4));
+		const json = await responseObj.json();
+		console.log('getEmail response body: ' + JSON.stringify(json, null, 4));
 
-		if (responseObj.status === 403) {
+		if (responseObj.status === 401 || responseObj.status === 403) {
 			await module.exports.getToken();
 			return await module.exports.getEmail(psid, retry + 1);
 		}
 
-		const json = await responseObj.json();
 		return await json['Email'];
 	},
 

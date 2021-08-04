@@ -161,7 +161,7 @@ client.on('message', async (message) => {
 
 				// Create cached map of discord ID to PSID.
 				try {
-					await createCache(message.author.id, psid);
+					await createCache(message.author, psid);
 				}
 				catch (e) {
 					console.error(e);

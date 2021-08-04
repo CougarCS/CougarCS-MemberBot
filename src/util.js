@@ -1,3 +1,5 @@
+const { digitsRegex, allDigitsRegex } = require('./regex');
+
 module.exports = {
 	fetchRoles: async (message) => {
 		const memberRole = await module.exports.getRoleByMessage(message, 'member');
@@ -13,19 +15,16 @@ module.exports = {
 		}
 	},
 	handledStatusCodes: [200, 404, 403],
-	getUserFromMention(client, mention) {
+	async getUserFromMention(client, mention) {
 		if (!mention) return;
-
-		if (mention.startsWith('<@') && mention.endsWith('>')) {
-			mention = mention.slice(2, -1);
-
-			if (mention.startsWith('!')) {
-				mention = mention.slice(1);
-			}
-
-			return client.users.cache.get(mention);
-		}
+		const userId = module.exports.getUserIdFromMention(mention);
+		console.log('User ID: ' + userId);
+		return await client.users.cache.get(userId);
 	},
-
+	getUserIdFromMention(mention) {
+		console.log('Mention: ' + mention);
+		if (allDigitsRegex.test(mention)) return mention;
+		return mention.match(digitsRegex)[0];
+	},
 };
 
