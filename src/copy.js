@@ -43,6 +43,7 @@ module.exports = {
 	memberRoleHasBeenRemoved: serverName => `Your \`Member\` role has been removed at the **${serverName}** discord server. Consider re-newing your CougarCS membership here: <https://www.cougarcs.com/register/>`,
 	apiResponse: jsonResp => `Here's the response from the **Member API**: \`\`\`json\n${JSON.stringify(jsonResp, null, 2)}\`\`\``,
 	cacheResponse: jsonResp => `Here's the response from **Member Cache**: \`\`\`json\n${JSON.stringify(jsonResp, null, 2)}\`\`\``,
+	discordResponse: jsonResp => `Here's the data from **Discord API**: \`\`\`json\n${JSON.stringify(jsonResp, null, 2)}\`\`\``,
 	ABOUT: `I was created in the Summer of 2021 by a gentlemen named Adil Iqbal. My purpose is to securely grant the \`Member\` role to Discord users that have a valid & current CougarCS Membership. To see what I can do for you, please use the \`${config.prefix}help\` command. I have also been given a letter for you from my creator. To read it, use the \`${config.prefix}letter\` command.`,
 	LETTER_FROM_ME_01:
     `\`\`\`
