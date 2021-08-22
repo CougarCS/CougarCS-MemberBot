@@ -29,7 +29,8 @@ module.exports = {
 
 		if (command.example === undefined || typeof command.example === 'string') {
 			data.push(`**Example:** \`${config.prefix}${command.name} ${command.example ? command.example : ''}\``);
-		} else if (command.example && Array.isArray(command.example)) {
+		}
+		else if (command.example && Array.isArray(command.example)) {
 			for (let i = 0; i < command.example.length; i++) {
 				data.push(`**Example ${i + 1}:** \`${config.prefix}${command.name} ${command.example[i]}\``);
 			}
