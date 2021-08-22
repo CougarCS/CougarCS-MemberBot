@@ -16,7 +16,7 @@ const {
 const { cacheExists, deleteCacheByDiscordId } = require('../mongodb');
 const { mentionRegex } = require('../regex');
 
-async function forgetAuthor(message, memberRole) {
+async function forgetAuthor(message) {
 	// Check if user exists in cache.
 	if (!(await cacheExists(message.author.id))) {
 		await message.reply(NOT_IN_CACHE);
@@ -39,17 +39,10 @@ async function forgetAuthor(message, memberRole) {
 module.exports = {
 	name: 'forget',
 	description: 'use if you would like me to erase you from my memory. (args for officers only)',
-	usage: '--forget <...@username>?',
-	example: ['', '@username1', '@username1 @username2'],
 	async execute(message, client, args) {
 
 		// Retrieve roles.
 		const [memberRole, officerRole] = await fetchRoles(message);
-
-		if (officerRole === undefined) {
-			await message.reply(OFFICER_ROLE_DOES_NOT_EXIST);
-			return;
-		}
 
 		if (memberRole === undefined) {
 			await message.reply(MEMBER_ROLE_DOES_NOT_EXIST);
@@ -57,53 +50,23 @@ module.exports = {
 			return;
 		}
 
-		if (!args.length) {
-			await forgetAuthor(message, memberRole);
+		// Check if user exists in cache.
+		if (!(await cacheExists(message.author.id))) {
+			await message.reply(NOT_IN_CACHE);
 			return;
 		}
 
-		// Check if user has required roles.
-		if (!message.member.roles.cache.has(memberRole.id) || !message.member.roles.cache.has(officerRole.id)) {
-			await message.reply(NOT_ENOUGH_PYLONS);
+		// Remove user from cache.
+		try {
+			await deleteCacheByDiscordId(message.author.id);
+		}
+		catch (e) {
+			await message.reply(SOME_ERROR);
+			console.error(e);
 			return;
 		}
 
-		for (const arg of args) {
-			if (!mentionRegex.test(arg)) continue;
-
-			const user = getUserFromMention(client, arg);
-
-			for (const serverId of cougarcsServerIds) {
-				const guild = client.guilds.cache.find(g => g.id === serverId);
-				if (guild === undefined) continue;
-
-				const guildMemberRole = guild.roles.cache.find(role => role.name.toLowerCase() === 'member');
-				if (guildMemberRole === undefined) continue;
-
-				const member = guild.members.cache.find(m => m.id === user.id);
-				if (member === undefined) continue;
-
-				if (member.roles.cache.has(guildMemberRole.id)) {
-					member.roles.remove(guildMemberRole);
-					await message.reply(memberRoleHasBeenRemovedFromUser(user.id));
-				}
-			}
-
-			// Check if user exists in cache.
-			if (!(await cacheExists(user.id))) {
-				await message.reply(userNotInCache(user.id));
-				continue;
-			}
-
-			try {
-				await deleteCacheByDiscordId(user.id);
-				await message.reply(userHasBeenForgotten(user.id));
-			}
-			catch (e) {
-				await message.reply(SOME_ERROR);
-				console.error(e);
-				return;
-			}
-		}
+		await message.reply(YOU_HAVE_BEEN_FORGOTTEN);
+		return;
 	},
 };
