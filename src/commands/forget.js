@@ -17,12 +17,6 @@ const { cacheExists, deleteCacheByDiscordId } = require('../mongodb');
 const { mentionRegex } = require('../regex');
 
 async function forgetAuthor(message, memberRole) {
-	// Remove member role.
-	if (message.member.roles.cache.has(memberRole.id)) {
-		await message.member.roles.remove(memberRole);
-		await message.reply(GENERIC_MEMBER_ROLE_REMOVED);
-	}
-
 	// Check if user exists in cache.
 	if (!(await cacheExists(message.author.id))) {
 		await message.reply(NOT_IN_CACHE);
@@ -44,7 +38,9 @@ async function forgetAuthor(message, memberRole) {
 
 module.exports = {
 	name: 'forget',
-	description: 'use if you would like me to forget you.',
+	description: 'use if you would like me to erase you from my memory. (args for officers only)',
+	usage: '--forget <...@username>?',
+	example: ['', '@username1', '@username1 @username2'],
 	async execute(message, client, args) {
 
 		// Retrieve roles.

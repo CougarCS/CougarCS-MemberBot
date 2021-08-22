@@ -7,7 +7,6 @@ const {
 	NOT_ENOUGH_PYLONS, SOME_ERROR,
 	apiResponse,
 	cacheResponse,
-	discordResponse,
 	informOfficer,
 	LOOKS_FUNKY,
 	NOT_IN_CACHE } = require('../copy');
@@ -16,10 +15,17 @@ const { getContactInfoByPsid, getContactInfoByEmail } = require('../memberAPI');
 const { officerChannels } = require('../config.json');
 const { getOneCacheByPsid } = require('../mongodb');
 
+function discordResponse(psid, discordObj) {
+	const jsonString = JSON.stringify(discordObj, null, 4);
+	return `The Discord account mapped to PSID # **${psid}**: \`\`\`json\n${jsonString}\`\`\``;
+}
+
 module.exports = {
 	name: 'whois',
 	superuser: true,
-	description: '(officers only) lookup person by PSID.',
+	description: '(officers only) lookup person by PSID or email.',
+	usage: '<psid|email>',
+	example: ['1234567', 'someone@somewhere.com'],
 	async execute(message, client, args) {
 
 		// Check if command was sent in an approved channel.
@@ -59,12 +65,13 @@ module.exports = {
 				const user = await getUserFromMention(client, cacheResp.discordId);
 				console.log('User: ' + JSON.stringify(user, null, 4));
 				if (user) {
-					const data = {
+					const discordObj = {
 						id: getUserIdFromMention(user.id),
 						username: user.username,
 						discriminator: user.discriminator,
+						tag: user.tag,
 					};
-					await message.reply(discordResponse(data));
+					await message.reply(discordResponse(cacheResp.psid, discordObj));
 				}
 				return;
 			}

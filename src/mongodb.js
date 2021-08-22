@@ -12,7 +12,7 @@ mongoose.connect(
 module.exports = {
 	cacheExists: async (givenDiscordId) => Cache.exists({ discordId : { $eq: givenDiscordId } }),
 	cacheExistsByPsid: async (givenPsid) => Cache.exists({ psid : { $eq: givenPsid } }),
-	createCache: async (discordUser, givenPsid) => new Cache({ discordId: getUserIdFromMention(discordUser.id), psid: givenPsid, userInfo: { username: discordUser.username, discriminator: discordUser.discriminator } }).save(),
+	createCache: async (discordUser, givenPsid) => new Cache({ discordId: getUserIdFromMention(discordUser.id), psid: givenPsid }).save(),
 	getCacheData: async () => Cache.find({}),
 	getOneCacheByPsid: async (givenPsid) => Cache.findOne({ psid: { $eq: givenPsid } }),
 	deleteCache: async (givenPsid) => Cache.deleteOne({ psid: { $eq: givenPsid } }),
