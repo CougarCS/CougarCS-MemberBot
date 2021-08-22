@@ -117,9 +117,10 @@ client.on('message', async (message) => {
 			// Record exists.
 			if (statusRespObj.status === 200) {
 				const json = await statusRespObj.json();
+				console.log("Status Response JSON: " + JSON.stringify(json, null, 4));
 
 				// Not member.
-				if (json['member-status'] === false) {
+				if (json['Membership Status'] === false) {
 					await message.reply(specificGreeting(json['Name'].split(' ')[0]));
 					if (json['Membership Start'] === null) {
 						await message.reply(NOT_A_MEMBER);
