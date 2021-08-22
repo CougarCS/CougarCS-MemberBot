@@ -19,7 +19,6 @@ module.exports = {
 		const command = commands.get(name);
 
 		if (!command) {
-			await message.react('⚠️');
 			await message.reply('*I don\'t know that command!*');
 			return;
 		}
@@ -36,7 +35,6 @@ module.exports = {
 			}
 		}
 
-		await message.react('✅');
 		await message.channel.send(data, { split: true });
 		return;
 	},
