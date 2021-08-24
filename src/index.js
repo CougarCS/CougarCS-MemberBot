@@ -42,7 +42,7 @@ client.once('ready', async () => {
 
 client.on('message', async (message) => {
 	try {
-		if (message.author.bot || omitChannels.includes(message.channel) || message.type != 'DEFAULT') return;
+		if (message.author.bot || omitChannels.includes(message.channel.id) || message.type != 'DEFAULT') return;
 
 		if (message.content.startsWith(prefix)) {
 			const args = message.content.slice(prefix.length).trim().split(spacesRegex);

@@ -43,7 +43,8 @@ module.exports = {
 		for (const arg of args) {
 			if (!mentionRegex.test(arg)) continue;
 
-			const user = getUserFromMention(client, arg);
+			const user = await getUserFromMention(client, arg);
+			console.log("User: " + user);
 
 			for (const serverId of cougarcsServerIds) {
 				const guild = client.guilds.cache.find(g => g.id === serverId);
