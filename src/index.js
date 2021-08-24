@@ -117,11 +117,11 @@ client.on('message', async (message) => {
 			// Record exists.
 			if (statusRespObj.status === 200) {
 				const json = await statusRespObj.json();
-				console.log("Status Response JSON: " + JSON.stringify(json, null, 4));
+				console.log('Status Response JSON: ' + JSON.stringify(json, null, 4));
 
 				// Not member.
 				if (json['Membership Status'] === false) {
-					await message.reply(specificGreeting(json['Name'].split(' ')[0]));
+					await message.reply(specificGreeting(json['First Name']));
 					if (json['Membership Start'] === null) {
 						await message.reply(NOT_A_MEMBER);
 					}
@@ -171,26 +171,34 @@ client.on('message', async (message) => {
 				}
 
 				for (const serverId of cougarcsServerIds) {
-					const guild = client.guilds.cache.find(g => g.id === serverId);
-					if (guild === undefined) continue;
+					try {
+						const guild = client.guilds.cache.find(g => g.id === serverId);
+						if (guild === undefined) continue;
 
-					// Invite user to CougarCS server if user isn't already a member.
-					if (!guild.members.cache.has(message.author.id)) {
-						await message.reply(inviteToServer(cougarcsInviteLinks[serverId]));
+						// Invite user to CougarCS server if user isn't already a member.
+						if (!guild.members.cache.has(message.author.id)) {
+							await message.reply(inviteToServer(cougarcsInviteLinks[serverId]));
+							continue;
+						}
+
+						// Fetch member for server.
+						const member = guild.members.cache.find(m => m.id === message.author.id);
+						console.log(`Member: ${JSON.stringify(member, null, 4)}`);
+						if (member === undefined) continue;
+
+						// Fetch memberRole for server.
+						const guildMemberRole = guild.roles.cache.find(r => r.name.toLowerCase() === 'member');
+						console.log(`guildMemberRole: ${JSON.stringify(guildMemberRole, null, 4)}`);
+						if (guildMemberRole === undefined) continue;
+
+						// Add member role if user doesn't have it already.
+						if (member.roles.cache.has(guildMemberRole.id)) continue;
+						await member.roles.add(guildMemberRole);
+					}
+					catch(e) {
+						console.error(e);
 						continue;
 					}
-
-					// Fetch member for server.
-					const member = guild.members.cache.find(m => m.id === message.author.id);
-					if (member === undefined) continue;
-
-					// Fetch memberRole for server.
-					const memberRole = guild.roles.cache.find(r => r.name.toLowerCase() === 'member');
-					if (memberRole === undefined) continue;
-
-					// Add member role if user doesn't have it already.
-					if (member.roles.cache.has(memberRole.id)) continue;
-					await member.roles.add(memberRole);
 				}
 
 				await message.reply(IS_A_MEMBER);
@@ -202,6 +210,7 @@ client.on('message', async (message) => {
 	catch (e) {
 		if (env == 'prod') {
 			await message.reply(SOME_ERROR);
+			console.error(e);
 			return;
 		}
 		else {
