@@ -172,7 +172,7 @@ client.on('message', async (message) => {
 
 				for (const serverId of cougarcsServerIds) {
 					try {
-						const guild = client.guilds.cache.find(g => g.id === serverId);
+						const guild = await client.guilds.fetch(serverId);
 						if (guild === undefined) continue;
 
 						// Invite user to CougarCS server if user isn't already a member.
@@ -182,7 +182,7 @@ client.on('message', async (message) => {
 						}
 
 						// Fetch member for server.
-						const member = guild.members.cache.find(m => m.id === message.author.id);
+						const member = await guild.members.fetch(message.author);
 						console.log(`Member: ${JSON.stringify(member, null, 4)}`);
 						if (member === undefined) continue;
 

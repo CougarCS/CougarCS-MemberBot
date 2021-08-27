@@ -47,17 +47,18 @@ module.exports = {
 			console.log("User: " + user);
 
 			for (const serverId of cougarcsServerIds) {
-				const guild = client.guilds.cache.find(g => g.id === serverId);
+				const guild = await client.guilds.fetch(serverId);
 				if (guild === undefined) continue;
 
 				const guildMemberRole = guild.roles.cache.find(role => role.name.toLowerCase() === 'member');
 				if (guildMemberRole === undefined) continue;
 
-				const member = guild.members.cache.find(m => m.id === user.id);
+				const member = await guild.members.fetch(message.author);
+				console.log(`Member: ${JSON.stringify(member, null, 4)}`);
 				if (member === undefined) continue;
 
 				if (member.roles.cache.has(guildMemberRole.id)) {
-					member.roles.remove(guildMemberRole);
+					await member.roles.remove(guildMemberRole);
 					await message.reply(memberRoleHasBeenRemovedFromUser(user.id));
 				}
 			}
