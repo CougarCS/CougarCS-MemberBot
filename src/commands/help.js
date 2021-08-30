@@ -3,6 +3,9 @@ const config = require('../config.json');
 module.exports = {
 	name: 'help',
 	description: 'info on all of my commands.',
+	useAllowedChannels: true,
+	usage: '<command?>',
+	example: ['', 'claim'],
 	async execute(message, client, args) {
 		const data = [];
 		const { commands } = message.client;

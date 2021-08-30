@@ -9,6 +9,7 @@
         "755292015851208715": ""
     },
     "omitChannels": [],
+    "allowChannels": ["881024791790878750"],
     "officerChannels": [
         "871445520076402688"
     ],
@@ -18,7 +19,8 @@
         "requestRetryLimit": "member api requests will retry this many times before giving up.",
         "cougarcsServerIds": "servers that will run the bot",
         "cougarcsInviteLinks": "invite links mapped to each server. Links must have no limit and never expire.",
-        "ommitChannels": "bot will be inactive in these discord channels.",
+        "allowChannels": "channels that the bot will be active in for non-officer users",
+        "omitChannels": "bot will be inactive in these discord channels.",
         "officerChannels": "officer commands may give out personal information. these channels should not be public."
     }
 }

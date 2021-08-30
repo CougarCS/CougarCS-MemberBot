@@ -15,6 +15,7 @@ const { cacheExists } = require('../mongodb');
 module.exports = {
 	name: 'claim',
 	description: 'use to claim your Membership role.',
+	useAllowedChannels: true,
 	async execute(message, client, args) {
 		// Check if member role exists. If not, shout out to an officer.
 		const [memberRole, officerRole] = await fetchRoles(message);

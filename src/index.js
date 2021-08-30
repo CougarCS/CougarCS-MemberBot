@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
-const { prefix, cougarcsServerIds, omitChannels, cougarcsInviteLinks, env } = require('./config.json');
+const { prefix, cougarcsServerIds, omitChannels, allowChannels, cougarcsInviteLinks, env } = require('./config.json');
 const { getStatus, getEmail, getToken } = require('./memberAPI');
 const { spacesRegex, userInputRegex, psidRegex, emailRegex } = require('./regex');
 const { handledStatusCodes } = require('./util');
@@ -26,6 +26,7 @@ const {
 	PSID_IS_TAKEN,
 } = require('./copy');
 const { cacheExists, createCache, cacheExistsByPsid } = require('./mongodb');
+const { useAllowedChannels } = require('./commands/claim');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -46,11 +47,13 @@ client.on('message', async (message) => {
 
 		if (message.content.startsWith(prefix)) {
 			const args = message.content.slice(prefix.length).trim().split(spacesRegex);
-			const command = args.shift().toLowerCase();
-			if (!client.commands.has(command)) return;
+			const commandName = args.shift().toLowerCase();
+			if (!client.commands.has(commandName)) return;
 
 			try {
-				client.commands.get(command).execute(message, client, args);
+				const command = client.commands.get(commandName);
+				if (command.useAllowedChannels && !allowChannels.includes(message.channel.id)) return;
+				command.execute(message, client, args);
 				return;
 			}
 			catch (error) {

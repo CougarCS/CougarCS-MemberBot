@@ -16,6 +16,7 @@ const { mentionRegex } = require('../regex');
 module.exports = {
 	name: 'revert',
 	description: '(officers only) completely revert onboarding flow for users.',
+	useAllowedChannels: true,
 	usage: '<...@username>',
 	example: ['@username1', '@username1 @username2'],
 	async execute(message, client, args) {
