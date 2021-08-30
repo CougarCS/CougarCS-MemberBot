@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
-const { prefix, cougarcsServerIds, omitChannels, allowChannels, cougarcsInviteLinks, env } = require('./config.json');
+const { prefix, cougarcsServerIds, omitChannels, allowChannels, cougarcsInviteLinks, env, cooldown } = require('./config.json');
 const { getStatus, getEmail, getToken } = require('./memberAPI');
 const { spacesRegex, userInputRegex, psidRegex, emailRegex } = require('./regex');
 const { handledStatusCodes } = require('./util');
@@ -18,6 +18,7 @@ const {
 	expiredMember,
 	specificGreeting,
 	inviteToServer,
+	cooldownLeftMessage,
 	NOT_A_MEMBER,
 	GENERIC_GREETING,
 	INPUT_EXAMPLE,
@@ -26,7 +27,6 @@ const {
 	PSID_IS_TAKEN,
 } = require('./copy');
 const { cacheExists, createCache, cacheExistsByPsid } = require('./mongodb');
-const { useAllowedChannels } = require('./commands/claim');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -36,6 +36,8 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
+const second = 1000;
+const dmCooldown = new Map();
 client.once('ready', async () => {
 	await getToken();
 	console.log('Ready!');
@@ -64,6 +66,25 @@ client.on('message', async (message) => {
 
 
 		if (message.channel.type == 'dm') {
+			// Check if dm is cooling down before proceeding.
+			if (dmCooldown.has(message.author.id)) {
+
+				// Remove cooldown if expired.
+				if (dmCooldown.get(message.author.id) > Date.now()) {dmCooldown.delete(message.author.id);}
+
+				// Inform if cooldown is active.
+				else {
+					const cooldownLeft = dmCooldown.get(message.author.id) - Date.now();
+					dmCooldown.set(message.author.id, Date.now() + cooldownLeft);
+					await message.reply(cooldownLeftMessage(cooldownLeft));
+					return;
+				}
+
+			}
+
+			// If not in cooldown, add cooldown.
+			dmCooldown.set(message.author.id, Date.now() + cooldown);
+			setTimeout(() => dmCooldown.delete(message.author.id), cooldown);
 
 			// Check if user already submitted valid psid,
 			if (await cacheExists(message.author.id)) {

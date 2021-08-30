@@ -22,7 +22,6 @@ function discordResponse(psid, discordObj) {
 
 module.exports = {
 	name: 'whois',
-	superuser: true,
 	description: '(officers only) lookup person by PSID or email.',
 	usage: '<psid|email>',
 	example: ['1234567', 'someone@somewhere.com'],

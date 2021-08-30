@@ -1,4 +1,5 @@
 const config = require('./config.json');
+const { millisToSeconds } = require('./util');
 
 module.exports = {
 	PSID_IS_TAKEN: 'It seems like that PSID is already taken. Either you have multiple accounts or there are shenanigans abound!',
@@ -40,6 +41,7 @@ module.exports = {
 	informOfficer: officerRole => `<@${officerRole.id}>, please add a role named \`Member\` to the server!`,
 	inviteToServer: inviteLink => `You're membership can also be used in this discord community: ${inviteLink}`,
 	notValidPsid: psid => `The value \`${psid}\` does not match the pattern for a PSID. A PSID is a 7 digit numeric value.`,
+	cooldownLeftMessage: cooldown => `Please try again after ${millisToSeconds(cooldown)} seconds!`,
 	memberRoleHasBeenRemoved: serverName => `Your \`Member\` role has been removed at the **${serverName}** discord server. Consider re-newing your CougarCS membership here: <https://www.cougarcs.com/register/>`,
 	apiResponse: jsonResp => `Here's the response from the **Member API**: \`\`\`json\n${JSON.stringify(jsonResp, null, 2)}\`\`\``,
 	cacheResponse: jsonResp => `Here's the response from **Member Cache**: \`\`\`json\n${JSON.stringify(jsonResp, null, 2)}\`\`\``,

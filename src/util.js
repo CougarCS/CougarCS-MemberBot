@@ -26,5 +26,8 @@ module.exports = {
 		if (allDigitsRegex.test(mention)) return mention;
 		return mention.match(digitsRegex)[0];
 	},
+	millisToSeconds(millis) {
+		return (millis / 1000).toFixed(1);
+	},
 };
 

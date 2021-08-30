@@ -2,6 +2,7 @@
 	"env": "dev",
     "prefix": "--",
     "requestRetryLimit": 5,
+    "cooldown": 3000,
     "cougarcsServerIds": [
         "755292015851208715"
     ],
