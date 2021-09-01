@@ -52,6 +52,7 @@ module.exports = {
 			await message.reply(PUNT_TO_DM);
 		}
 		catch (e) {
+			console.error(e);
 			await message.reply(COULD_NOT_SEND_DM);
 		}
 	},

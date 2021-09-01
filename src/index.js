@@ -1,5 +1,6 @@
 require('dotenv').config();
-const Discord = require('discord.js');
+const Discord = require('discord.js'); 
+
 const fs = require('fs');
 const { prefix, cougarcsServerIds, omitChannels, allowChannels, cougarcsInviteLinks, env, cooldown } = require('./config.json');
 const { getStatus, getEmail, getToken } = require('./memberAPI');
@@ -36,7 +37,6 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
-const second = 1000;
 const dmCooldown = new Map();
 client.once('ready', async () => {
 	await getToken();
@@ -70,7 +70,7 @@ client.on('message', async (message) => {
 			if (dmCooldown.has(message.author.id)) {
 
 				// Remove cooldown if expired.
-				if (dmCooldown.get(message.author.id) > Date.now()) {dmCooldown.delete(message.author.id);}
+				if (dmCooldown.get(message.author.id) < Date.now()) {dmCooldown.delete(message.author.id);}
 
 				// Inform if cooldown is active.
 				else {
@@ -84,7 +84,7 @@ client.on('message', async (message) => {
 
 			// If not in cooldown, add cooldown.
 			dmCooldown.set(message.author.id, Date.now() + cooldown);
-			setTimeout(() => dmCooldown.delete(message.author.id), cooldown);
+			setTimeout(() => dmCooldown.delete(message.author.id), cooldown + 100);
 
 			// Check if user already submitted valid psid,
 			if (await cacheExists(message.author.id)) {
