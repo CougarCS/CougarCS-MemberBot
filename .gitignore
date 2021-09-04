@@ -3,6 +3,7 @@ hidden.txt
 docs/collision_protocol.md
 prod.config.json
 bot.out
+hidden
 
 # Logs
 logs

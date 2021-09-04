@@ -1,6 +1,7 @@
 # Change Log
 
 ## Version 0.0.12 - 8/1/2021
+- Bot now accepts multiple prefixes.
 - The `whois` command now takes email as an argument.
 - The `whois` command will now return cache data if used with PSID.
 - The `whois` command is limited to officer channels.

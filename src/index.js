@@ -2,10 +2,10 @@ require('dotenv').config();
 const Discord = require('discord.js'); 
 
 const fs = require('fs');
-const { prefix, cougarcsServerIds, omitChannels, allowChannels, cougarcsInviteLinks, env, cooldown } = require('./config.json');
+const { cougarcsServerIds, omitChannels, allowChannels, cougarcsInviteLinks, env, cooldown } = require('./config.json');
 const { getStatus, getEmail, getToken } = require('./memberAPI');
 const { spacesRegex, userInputRegex, psidRegex, emailRegex } = require('./regex');
-const { handledStatusCodes } = require('./util');
+const { handledStatusCodes, detectPrefix } = require('./util');
 const { truncate } = require('lodash/truncate');
 const {
 	INPUT_ERROR,
@@ -47,7 +47,8 @@ client.on('message', async (message) => {
 	try {
 		if (message.author.bot || omitChannels.includes(message.channel.id) || message.type != 'DEFAULT') return;
 
-		if (message.content.startsWith(prefix)) {
+		const prefix = detectPrefix(message);
+		if (prefix) {
 			const args = message.content.slice(prefix.length).trim().split(spacesRegex);
 			const commandName = args.shift().toLowerCase();
 			if (!client.commands.has(commandName)) return;

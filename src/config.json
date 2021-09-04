@@ -1,6 +1,6 @@
 {
 	"env": "dev",
-    "prefix": "--",
+    "prefix": ["--", "—"],
     "requestRetryLimit": 5,
     "cooldown": 3000,
     "cougarcsServerIds": [

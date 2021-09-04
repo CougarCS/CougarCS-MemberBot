@@ -1,4 +1,5 @@
 const { digitsRegex, allDigitsRegex } = require('./regex');
+const { prefix } = require('./config.json');
 
 module.exports = {
 	fetchRoles: async (message) => {
@@ -29,5 +30,8 @@ module.exports = {
 	millisToSeconds(millis) {
 		return (millis / 1000).toFixed(1);
 	},
+	detectPrefix(message) {
+		for (const str of prefix) if (message.startsWith(str)) return str;
+	}
 };
 
