@@ -9,7 +9,10 @@
     "cougarcsInviteLinks": {
         "755292015851208715": ""
     },
-    "omitChannels": [],
+    "omitChannels": [
+        "669338907833532418",
+        "752969780645986483"
+    ],
     "allowChannels": ["881024791790878750"],
     "officerChannels": [
         "871445520076402688"
