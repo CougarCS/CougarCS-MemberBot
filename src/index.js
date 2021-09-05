@@ -1,5 +1,5 @@
 require('dotenv').config();
-const Discord = require('discord.js'); 
+const Discord = require('discord.js');
 
 const fs = require('fs');
 const { cougarcsServerIds, omitChannels, allowChannels, cougarcsInviteLinks, env, cooldown } = require('./config.json');

@@ -1,4 +1,5 @@
 const config = require('../config.json');
+const prefix = config.prefixes[0];
 
 module.exports = {
 	name: 'help',
@@ -13,7 +14,7 @@ module.exports = {
 		if (!args.length) {
 			data.push('Here\'s a list of all my commands:\n```');
 			data.push(commands.map(command => command.name).join(', '));
-			data.push(`\`\`\`\nYou can send \`${config.prefix}help [command name]\` to get info on a specific command!`);
+			data.push(`\`\`\`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
 
 			return await message.reply(data, { split: true });
 		}
@@ -28,14 +29,14 @@ module.exports = {
 
 		data.push(`**Command Name:** ${command.name}`);
 		if (command.description) data.push(`**Description:** ${command.description}`);
-		data.push(`**Usage:** \`${config.prefix}${command.name} ${command.usage ? command.usage : ''}\``);
+		data.push(`**Usage:** \`${prefix}${command.name} ${command.usage ? command.usage : ''}\``);
 
 		if (command.example === undefined || typeof command.example === 'string') {
-			data.push(`**Example:** \`${config.prefix}${command.name} ${command.example ? command.example : ''}\``);
+			data.push(`**Example:** \`${prefix}${command.name} ${command.example ? command.example : ''}\``);
 		}
 		else if (command.example && Array.isArray(command.example)) {
 			for (let i = 0; i < command.example.length; i++) {
-				data.push(`**Example ${i + 1}:** \`${config.prefix}${command.name} ${command.example[i]}\``);
+				data.push(`**Example ${i + 1}:** \`${prefix}${command.name} ${command.example[i]}\``);
 			}
 		}
 

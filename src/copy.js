@@ -1,5 +1,6 @@
 const config = require('./config.json');
 const { millisToSeconds } = require('./util');
+const prefix = config.prefixes[0];
 
 module.exports = {
 	PSID_IS_TAKEN: 'It seems like that PSID is already taken. Either you have multiple accounts or there are shenanigans abound!',
@@ -12,7 +13,7 @@ module.exports = {
 	YOU_HAVE_BEEN_FORGOTTEN: 'You have been erased from my memory.',
 	COULD_NOT_SEND_DM: 'Please make sure your DM\'s are enabled and try again.',
 	OFFICER_ONLY_CHANNELS: 'I can only reply to this command in Officer-only channels.',
-	WHO_IS_HELP: `I didn't understand. Use the command \`${config.prefix}help whois\` for more info.`,
+	WHO_IS_HELP: `I didn't understand. Use the command \`${prefix}help whois\` for more info.`,
 	MEMBER_ROLE_DOES_NOT_EXIST: 'A role named \`Member\` does not exist!',
 	OFFICER_ROLE_DOES_NOT_EXIST: 'A role named \`Officer\` does not exist!',
 	ALREADY_HAS_ROLE: 'You already have the \`Member\` role.',
@@ -28,8 +29,8 @@ module.exports = {
 	NO_MEMBER_RECORD: 'We don\'t see you in our Members database. Consider joining CougarCS here: <https://www.cougarcs.com/register/>',
 	PIMP_COUGARCS: 'CougarCS is one of the largest, student-lead Computer Science clubs at the University of Houston.',
 	IS_A_MEMBER: '**Congradulations!** You have been granted the \`Member\` role on all of the CougarCS Discord Servers. It\'s a pleasure to have you!',
-	PUNT_TO_SERVER: `I remember you! Go to any server and use the \`${config.prefix}claim\` command to redeem your membership role.`,
-	USE_CLAIM_IF_NOT_MEMBER: `If you ever find yourself without the \`Member\` role on our servers, use the \`${config.prefix}claim\` command again, and I'll take care of it.`,
+	PUNT_TO_SERVER: `I remember you! Go to any server and use the \`${prefix}claim\` command to redeem your membership role.`,
+	USE_CLAIM_IF_NOT_MEMBER: `If you ever find yourself without the \`Member\` role on our servers, use the \`${prefix}claim\` command again, and I'll take care of it.`,
 	IF_THIS_IS_AN_ERROR: '**Did we make a mistake?** Contact us with @Officer in CougarCS Discords or email us at info@cougarcs.com',
 	BAD_BOT_CREDS: 'My credentials are no longer valid. Please inform a CougarCS Officer to get this issue resolved!',
 	SOME_ERROR: 'Oops! Something went wrong. Please try again later.',
@@ -46,7 +47,7 @@ module.exports = {
 	apiResponse: jsonResp => `Here's the response from the **Member API**: \`\`\`json\n${JSON.stringify(jsonResp, null, 2)}\`\`\``,
 	cacheResponse: jsonResp => `Here's the response from **Member Cache**: \`\`\`json\n${JSON.stringify(jsonResp, null, 2)}\`\`\``,
 	discordResponse: jsonResp => `Here's the data from **Discord API**: \`\`\`json\n${JSON.stringify(jsonResp, null, 2)}\`\`\``,
-	ABOUT: `I was created in the Summer of 2021 by a gentlemen named Adil Iqbal. My purpose is to securely grant the \`Member\` role to Discord users that have a valid & current CougarCS Membership. To see what I can do for you, please use the \`${config.prefix}help\` command. I have also been given a letter for you from my creator. To read it, use the \`${config.prefix}letter\` command.`,
+	ABOUT: `I was created in the Summer of 2021 by a gentlemen named Adil Iqbal. My purpose is to securely grant the \`Member\` role to Discord users that have a valid & current CougarCS Membership. To see what I can do for you, please use the \`${prefix}help\` command. I have also been given a letter for you from my creator. To read it, use the \`${prefix}letter\` command.`,
 	LETTER_FROM_ME_01:
     `\`\`\`
     Dear reader,

@@ -1,6 +1,6 @@
 {
 	"env": "dev",
-    "prefix": ["--", "—"],
+    "prefixes": ["--", "—"],
     "requestRetryLimit": 5,
     "cooldown": 3000,
     "cougarcsServerIds": [
@@ -16,7 +16,7 @@
     ],
     "_comment": {
         "env": "A 'dev' value push any errors to discord. A 'prod' value will push generic error message to discord",
-        "prefix": "command prefix.",
+        "prefixes": "command prefixes.",
         "requestRetryLimit": "member api requests will retry this many times before giving up.",
         "cougarcsServerIds": "servers that will run the bot",
         "cougarcsInviteLinks": "invite links mapped to each server. Links must have no limit and never expire.",
