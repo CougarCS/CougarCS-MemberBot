@@ -164,7 +164,7 @@ client.on('message', async (message) => {
 					return;
 				}
 
-				if (givenEmail.toLowerCase() !== actualEmail.toLowerCase()) {
+				if (solutionism(givenEmail.toLowerCase()) !== solutionism(actualEmail.toLowerCase())) {
 					await message.reply(USE_SAME_EMAIL);
 					return;
 				}
@@ -233,9 +233,9 @@ client.on('message', async (message) => {
 		}
 	}
 	catch (e) {
+		console.error(e);
 		if (env == 'prod') {
 			await message.reply(SOME_ERROR);
-			console.error(e);
 			return;
 		}
 		else {
