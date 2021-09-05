@@ -6,4 +6,5 @@ module.exports = {
 	mentionRegex: /^<@!?\d+>$/,
 	digitsRegex: /\d+/,
 	allDigitsRegex: /^\d+$/,
+	dotsRegex: /\./g,
 };

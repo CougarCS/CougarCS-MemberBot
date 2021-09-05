@@ -6,7 +6,7 @@ const { cougarcsServerIds, omitChannels, allowChannels, cougarcsInviteLinks, env
 const { getStatus, getEmail, getToken } = require('./memberAPI');
 const { spacesRegex, userInputRegex, psidRegex, emailRegex } = require('./regex');
 const { handledStatusCodes, detectPrefix } = require('./util');
-const { truncate } = require('lodash/truncate');
+const _ = require('lodash');
 const {
 	INPUT_ERROR,
 	PUNT_TO_SERVER,
@@ -239,7 +239,7 @@ client.on('message', async (message) => {
 			return;
 		}
 		else {
-			await message.reply(`\`\`\`${truncate(e, { length: 1500 })}\`\`\``);
+			await message.reply(`\`\`\`${_.truncate(e.stack, { length: 1500 })}\`\`\``);
 			return;
 		}
 	}

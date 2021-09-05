@@ -1,4 +1,4 @@
-const { digitsRegex, allDigitsRegex } = require('./regex');
+const { digitsRegex, allDigitsRegex, dotsRegex } = require('./regex');
 const { prefixes } = require('./config.json');
 
 module.exports = {
@@ -31,7 +31,12 @@ module.exports = {
 		return (millis / 1000).toFixed(1);
 	},
 	detectPrefix(message) {
-		for (const str of prefixes) if (message.startsWith(str)) return str;
+		for (const str of prefixes) if (message.content.startsWith(str)) return str;
 	},
+	solutionism(email) {
+		const [username, domain] = email.split('@');
+		const safeUsername = username.replace(dotsRegex, "");
+		return safeUsername + "@" + domain;
+	}
 };
 

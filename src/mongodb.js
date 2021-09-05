@@ -15,6 +15,6 @@ module.exports = {
 	createCache: async (discordUser, givenPsid) => new Cache({ discordId: getUserIdFromMention(discordUser.id), psid: givenPsid }).save(),
 	getCacheData: async () => Cache.find({}),
 	getOneCacheByPsid: async (givenPsid) => Cache.findOne({ psid: { $eq: givenPsid } }),
-	deleteCache: async (givenPsid) => Cache.deleteOne({ psid: { $eq: givenPsid } }),
-	deleteCacheByDiscordId: async (givenDiscordId) => Cache.deleteOne({ discordId: { $eq: givenDiscordId } }),
+	deleteCache: async (givenPsid) => Cache.deleteMany({ psid: { $eq: givenPsid } }),
+	deleteCacheByDiscordId: async (givenDiscordId) => Cache.deleteMany({ discordId: { $eq: givenDiscordId } }),
 };
