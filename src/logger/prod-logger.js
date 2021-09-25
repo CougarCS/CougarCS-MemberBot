@@ -12,7 +12,7 @@ const baseDir = path.dirname(path.dirname(__filename));
 
 const cloudWatchTransport = new WinstonCloudwatch({
 	name,
-	logGroupName: `${name}@${version}`,
+	logGroupName: name,
 	logStreamName() {
 		const date = new Date().toISOString().split('T')[0];
 		return `prod-${date}-${crypto

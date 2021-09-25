@@ -28,7 +28,7 @@ module.exports = {
 	USE_OWN_DATA: 'Try again. Make sure you use your own data! I\'ll need them to look you up.',
 	NO_MEMBER_RECORD: 'We don\'t see you in our Members database. Consider joining CougarCS here: <https://www.cougarcs.com/register/>',
 	PIMP_COUGARCS: 'CougarCS is one of the largest, student-lead Computer Science clubs at the University of Houston.',
-	IS_A_MEMBER: '**Congradulations!** You have been granted the \`Member\` role on all of the CougarCS Discord Servers. It\'s a pleasure to have you!',
+	IS_A_MEMBER: `**Congratulations!** It\'s a pleasure to have you. **Go to any CougarCS server and use the \`${prefix}claim\` command to redeem your membership role.`,
 	PUNT_TO_SERVER: `I remember you! Go to any server and use the \`${prefix}claim\` command to redeem your membership role.`,
 	USE_CLAIM_IF_NOT_MEMBER: `If you ever find yourself without the \`Member\` role on our servers, use the \`${prefix}claim\` command again, and I'll take care of it.`,
 	IF_THIS_IS_AN_ERROR: '**Did we make a mistake?** Contact us with @Officer in CougarCS Discords or email us at info@cougarcs.com',

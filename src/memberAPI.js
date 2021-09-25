@@ -31,7 +31,7 @@ module.exports = {
 
 		const json = await responseObj.json();
 		module.exports.token = json.token;
-		logger.info(module.exports.token);
+		logger.debug(module.exports.token);
 	},
 
 	getStatus: async (psid, retry = 0) => {
