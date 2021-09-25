@@ -6,6 +6,9 @@ const {
 	informOfficer,
 	SOME_ERROR } = require('../copy');
 const { cacheExists, deleteCacheByDiscordId } = require('../mongodb');
+const createLogger = require('../../logger');
+const logger = createLogger(__filename);
+
 
 module.exports = {
 	name: 'forget',
@@ -34,7 +37,7 @@ module.exports = {
 		}
 		catch (e) {
 			await message.reply(SOME_ERROR);
-			console.error(e);
+			logger.error(e);
 			return;
 		}
 

@@ -11,6 +11,8 @@ const {
 	COULD_NOT_SEND_DM,
 	informOfficer } = require('../copy');
 const { cacheExists } = require('../mongodb');
+const createLogger = require('../../logger');
+const logger = createLogger(__filename);
 
 module.exports = {
 	name: 'claim',
@@ -52,7 +54,7 @@ module.exports = {
 			await message.reply(PUNT_TO_DM);
 		}
 		catch (e) {
-			console.error(e);
+			logger.error(e);
 			await message.reply(COULD_NOT_SEND_DM);
 		}
 	},

@@ -1,5 +1,7 @@
 const { digitsRegex, allDigitsRegex, dotsRegex } = require('./regex');
 const { prefixes } = require('./config.json');
+const createLogger = require('../logger');
+const logger = createLogger(__filename);
 
 module.exports = {
 	fetchRoles: async (message) => {
@@ -19,11 +21,11 @@ module.exports = {
 	async getUserFromMention(client, mention) {
 		if (!mention) return;
 		const userId = module.exports.getUserIdFromMention(mention);
-		console.log('User ID: ' + userId);
+		logger.info('User ID: ' + userId);
 		return await client.users.cache.get(userId);
 	},
 	getUserIdFromMention(mention) {
-		console.log('Mention: ' + mention);
+		logger.info('Mention: ' + mention);
 		if (allDigitsRegex.test(mention)) return mention;
 		return mention.match(digitsRegex)[0];
 	},

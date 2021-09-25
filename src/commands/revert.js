@@ -12,6 +12,8 @@ const {
 
 const { cacheExists, deleteCacheByDiscordId } = require('../mongodb');
 const { mentionRegex } = require('../regex');
+const createLogger = require('../../logger');
+const logger = createLogger(__filename);
 
 module.exports = {
 	name: 'revert',
@@ -45,7 +47,7 @@ module.exports = {
 			if (!mentionRegex.test(arg)) continue;
 
 			const user = await getUserFromMention(client, arg);
-			console.log('User: ' + user);
+			logger.info('User: ' + user);
 
 			for (const serverId of cougarcsServerIds) {
 				const guild = await client.guilds.fetch(serverId);
@@ -55,7 +57,7 @@ module.exports = {
 				if (guildMemberRole === undefined) continue;
 
 				const member = await guild.members.fetch(message.author);
-				console.log(`Member: ${JSON.stringify(member, null, 4)}`);
+				logger.info(`Member: ${JSON.stringify(member, null, 4)}`);
 				if (member === undefined) continue;
 
 				if (member.roles.cache.has(guildMemberRole.id)) {
@@ -76,7 +78,7 @@ module.exports = {
 			}
 			catch (e) {
 				await message.reply(SOME_ERROR);
-				console.error(e);
+				logger.info(e);
 				return;
 			}
 		}

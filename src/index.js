@@ -125,7 +125,7 @@ client.on('message', async (message) => {
 				return;
 			}
 
-			logger\.info('statusRespObj.status = ' + statusRespObj.status);
+			logger.info('statusRespObj.status = ' + statusRespObj.status);
 
 			// All other errors.
 			if (!handledStatusCodes.includes(statusRespObj.status)) {

@@ -14,6 +14,8 @@ const { psidRegex, emailRegex } = require('../regex');
 const { getContactInfoByPsid, getContactInfoByEmail } = require('../memberAPI');
 const { officerChannels } = require('../config.json');
 const { getOneCacheByPsid } = require('../mongodb');
+const createLogger = require('../../logger');
+const logger = createLogger(__filename);
 
 function discordResponse(psid, discordObj) {
 	const jsonString = JSON.stringify(discordObj, null, 4);
@@ -63,7 +65,7 @@ module.exports = {
 				await message.reply(cacheResponse(cacheResp));
 				if (!cacheResp) return;
 				const user = await getUserFromMention(client, cacheResp.discordId);
-				console.log('User: ' + JSON.stringify(user, null, 4));
+				logger.info('User: ' + JSON.stringify(user, null, 4));
 				if (user) {
 					const discordObj = {
 						id: getUserIdFromMention(user.id),
@@ -78,7 +80,7 @@ module.exports = {
 
 			catch (e) {
 				await message.reply(NOT_IN_CACHE);
-				console.error(e);
+				logger.info(e);
 			}
 
 			await message.reply(LOOKS_FUNKY);
