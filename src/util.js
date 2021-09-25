@@ -35,8 +35,8 @@ module.exports = {
 	},
 	solutionism(email) {
 		const [username, domain] = email.split('@');
-		const safeUsername = username.replace(dotsRegex, "");
-		return safeUsername + "@" + domain;
-	}
+		const safeUsername = username.replace(dotsRegex, '');
+		return safeUsername + '@' + domain;
+	},
 };
 

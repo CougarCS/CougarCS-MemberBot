@@ -5,7 +5,7 @@ const fs = require('fs');
 const { cougarcsServerIds, omitChannels, allowChannels, cougarcsInviteLinks, env, cooldown } = require('./config.json');
 const { getStatus, getEmail, getToken } = require('./memberAPI');
 const { spacesRegex, userInputRegex, psidRegex, emailRegex } = require('./regex');
-const { handledStatusCodes, detectPrefix } = require('./util');
+const { handledStatusCodes, detectPrefix, solutionism } = require('./util');
 const _ = require('lodash');
 const {
 	INPUT_ERROR,
@@ -28,7 +28,9 @@ const {
 	PSID_IS_TAKEN,
 } = require('./copy');
 const { cacheExists, createCache, cacheExistsByPsid } = require('./mongodb');
+const createLogger = require('../logger');
 
+const logger = createLogger(__filename);
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
@@ -40,7 +42,7 @@ for (const file of commandFiles) {
 const dmCooldown = new Map();
 client.once('ready', async () => {
 	await getToken();
-	console.log('Ready!');
+	logger.info('Ready!');
 });
 
 client.on('message', async (message) => {
@@ -60,7 +62,7 @@ client.on('message', async (message) => {
 				return;
 			}
 			catch (error) {
-				console.error(error);
+				logger.error(error);
 				message.reply('there was an error trying to execute that command!');
 			}
 		}
@@ -123,7 +125,7 @@ client.on('message', async (message) => {
 				return;
 			}
 
-			console.log('statusRespObj.status = ' + statusRespObj.status);
+			logger\.info('statusRespObj.status = ' + statusRespObj.status);
 
 			// All other errors.
 			if (!handledStatusCodes.includes(statusRespObj.status)) {
@@ -142,7 +144,7 @@ client.on('message', async (message) => {
 			// Record exists.
 			if (statusRespObj.status === 200) {
 				const json = await statusRespObj.json();
-				console.log('Status Response JSON: ' + JSON.stringify(json, null, 4));
+				logger.info('Status Response JSON: ' + JSON.stringify(json, null, 4));
 
 				// Not member.
 				if (json['Membership Status'] === false) {
@@ -190,7 +192,7 @@ client.on('message', async (message) => {
 					await createCache(message.author, psid);
 				}
 				catch (e) {
-					console.error(e);
+					logger.error(e);
 					await message.reply(SOME_ERROR);
 					return;
 				}
@@ -208,12 +210,12 @@ client.on('message', async (message) => {
 
 						// Fetch member for server.
 						const member = await guild.members.fetch(message.author);
-						console.log(`Member: ${JSON.stringify(member, null, 4)}`);
+						logger.info(`Member: ${JSON.stringify(member, null, 4)}`);
 						if (member === undefined) continue;
 
 						// Fetch memberRole for server.
 						const guildMemberRole = guild.roles.cache.find(r => r.name.toLowerCase() === 'member');
-						console.log(`guildMemberRole: ${JSON.stringify(guildMemberRole, null, 4)}`);
+						logger.info(`guildMemberRole: ${JSON.stringify(guildMemberRole, null, 4)}`);
 						if (guildMemberRole === undefined) continue;
 
 						// Add member role if user doesn't have it already.
@@ -221,7 +223,7 @@ client.on('message', async (message) => {
 						await member.roles.add(guildMemberRole);
 					}
 					catch(e) {
-						console.error(e);
+						logger.info(e);
 						continue;
 					}
 				}
@@ -233,7 +235,7 @@ client.on('message', async (message) => {
 		}
 	}
 	catch (e) {
-		console.error(e);
+		logger.error(e);
 		if (env == 'prod') {
 			await message.reply(SOME_ERROR);
 			return;

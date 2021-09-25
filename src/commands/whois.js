@@ -61,6 +61,7 @@ module.exports = {
 			try {
 				const cacheResp = await getOneCacheByPsid(args[0]);
 				await message.reply(cacheResponse(cacheResp));
+				if (!cacheResp) return;
 				const user = await getUserFromMention(client, cacheResp.discordId);
 				console.log('User: ' + JSON.stringify(user, null, 4));
 				if (user) {
@@ -74,6 +75,7 @@ module.exports = {
 				}
 				return;
 			}
+
 			catch (e) {
 				await message.reply(NOT_IN_CACHE);
 				console.error(e);
