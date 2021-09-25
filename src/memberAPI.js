@@ -1,6 +1,8 @@
-require('dotenv').config();
 const fetch = require('node-fetch');
 const { requestRetryLimit } = require('./config.json');
+const createLogger = require('./logger');
+const logger = createLogger(__filename);
+
 const baseUrl = process.env.MEMBER_API_BASE_URL;
 const accessKey = process.env.MEMBER_API_ACCESS_KEY;
 const secretKey = process.env.MEMBER_API_SECRET_KEY;

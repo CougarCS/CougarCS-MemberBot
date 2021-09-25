@@ -2,6 +2,9 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const Cache = require('./cache');
 const { getUserIdFromMention } = require('./util');
+const createLogger = require('./logger');
+
+const logger = createLogger(__filename);
 
 mongoose.connect(
 	process.env.MONGO_URI,
