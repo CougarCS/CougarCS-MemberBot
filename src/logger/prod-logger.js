@@ -36,4 +36,4 @@ function createProdLogger(toFilePath) {
   });
 }
 
-export default createProdLogger;
+module.exports = createProdLogger;

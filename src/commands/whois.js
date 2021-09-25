@@ -14,7 +14,7 @@ const { psidRegex, emailRegex } = require('../regex');
 const { getContactInfoByPsid, getContactInfoByEmail } = require('../memberAPI');
 const { officerChannels } = require('../config.json');
 const { getOneCacheByPsid } = require('../mongodb');
-const createLogger = require('../../logger');
+const createLogger = require('../logger');
 const logger = createLogger(__filename);
 
 function discordResponse(psid, discordObj) {

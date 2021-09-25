@@ -6,4 +6,4 @@ let loggerFactory;
 if (process.env.NODE_ENV?.startsWith('dev')) loggerFactory = devLoggerFactory;
 else loggerFactory = prodLoggerFactory;
 
-export default loggerFactory;
+module.exports = loggerFactory;

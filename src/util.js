@@ -1,6 +1,6 @@
 const { digitsRegex, allDigitsRegex, dotsRegex } = require('./regex');
 const { prefixes } = require('./config.json');
-const createLogger = require('../logger');
+const createLogger = require('./logger');
 const logger = createLogger(__filename);
 
 module.exports = {

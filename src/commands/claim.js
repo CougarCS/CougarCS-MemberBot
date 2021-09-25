@@ -11,7 +11,7 @@ const {
 	COULD_NOT_SEND_DM,
 	informOfficer } = require('../copy');
 const { cacheExists } = require('../mongodb');
-const createLogger = require('../../logger');
+const createLogger = require('../logger');
 const logger = createLogger(__filename);
 
 module.exports = {

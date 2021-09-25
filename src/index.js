@@ -28,7 +28,7 @@ const {
 	PSID_IS_TAKEN,
 } = require('./copy');
 const { cacheExists, createCache, cacheExistsByPsid } = require('./mongodb');
-const createLogger = require('../logger');
+const createLogger = require('./logger');
 
 const logger = createLogger(__filename);
 const client = new Discord.Client();

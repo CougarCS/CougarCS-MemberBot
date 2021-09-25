@@ -21,4 +21,4 @@ function createDevLogger(toFilePath) {
   });
 }
 
-export default createDevLogger;
+module.exports = createDevLogger;

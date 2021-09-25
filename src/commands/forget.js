@@ -6,7 +6,7 @@ const {
 	informOfficer,
 	SOME_ERROR } = require('../copy');
 const { cacheExists, deleteCacheByDiscordId } = require('../mongodb');
-const createLogger = require('../../logger');
+const createLogger = require('../logger');
 const logger = createLogger(__filename);
 
 

@@ -12,7 +12,7 @@ const {
 
 const { cacheExists, deleteCacheByDiscordId } = require('../mongodb');
 const { mentionRegex } = require('../regex');
-const createLogger = require('../../logger');
+const createLogger = require('../logger');
 const logger = createLogger(__filename);
 
 module.exports = {

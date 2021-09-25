@@ -23,13 +23,13 @@ module.exports = {
 
 		if (responseObj.status != 200) {
 			const json = await responseObj.json();
-			console.log(JSON.stringify(json, null, 2));
+			logger.info(JSON.stringify(json, null, 2));
 			return undefined;
 		}
 
 		const json = await responseObj.json();
 		module.exports.token = json.token;
-		console.log(module.exports.token);
+		logger.info(module.exports.token);
 	},
 
 	getStatus: async (psid, retry = 0) => {
@@ -75,11 +75,11 @@ module.exports = {
 			},
 		});
 
-		console.log('getEmail status: ' + responseObj.status);
+		logger.info('getEmail status: ' + responseObj.status);
 		const headers = await responseObj.headers;
-		console.log('getEmail response headers: ' + JSON.stringify(headers, null, 4));
+		logger.info('getEmail response headers: ' + JSON.stringify(headers, null, 4));
 		const json = await responseObj.json();
-		console.log('getEmail response body: ' + JSON.stringify(json, null, 4));
+		logger.info('getEmail response body: ' + JSON.stringify(json, null, 4));
 
 		if (responseObj.status === 401 || responseObj.status === 403) {
 			await module.exports.getToken();
@@ -107,11 +107,11 @@ module.exports = {
 			},
 		});
 
-		console.log('getContactInfoByPsid responseObj.status = ' + responseObj.status);
+		logger.info('getContactInfoByPsid responseObj.status = ' + responseObj.status);
 		const headers = await responseObj.headers;
-		console.log('getContactInfoByPsid response headers: ' + JSON.stringify(headers, null, 4));
+		logger.info('getContactInfoByPsid response headers: ' + JSON.stringify(headers, null, 4));
 		const json = await responseObj.json();
-		console.log('getContactInfoByPsid response body: ' + JSON.stringify(json, null, 4));
+		logger.info('getContactInfoByPsid response body: ' + JSON.stringify(json, null, 4));
 
 		if (responseObj.status === 403 || responseObj.status == 401) {
 			await module.exports.getToken();
@@ -138,11 +138,11 @@ module.exports = {
 			},
 		});
 
-		console.log('getContactInfoByEmail status: ' + responseObj.status);
+		logger.info('getContactInfoByEmail status: ' + responseObj.status);
 		const headers = await responseObj.headers;
-		console.log('getContactInfoByEmail response headers: ' + JSON.stringify(headers, null, 4));
+		logger.info('getContactInfoByEmail response headers: ' + JSON.stringify(headers, null, 4));
 		const json = await responseObj.json();
-		console.log('getContactInfoByEmail response body: ' + JSON.stringify(json, null, 4));
+		logger.info('getContactInfoByEmail response body: ' + JSON.stringify(json, null, 4));
 
 		if (responseObj.status === 403 || responseObj.status == 401) {
 			await module.exports.getToken();
