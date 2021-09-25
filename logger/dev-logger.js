@@ -1,9 +1,9 @@
-import path from 'path';
-import winston from 'winston';
+const path = require('path');
+const winston = require('winston');
 
 const baseDir = path.dirname(path.dirname(__filename));
 
-function createDevLogger(toFilePath: string) {
+function createDevLogger(toFilePath) {
   const relativeFilePath = path.relative(baseDir, toFilePath);
   const logFormat = winston.format.printf(
     ({ level, message, timestamp, stack }) =>

@@ -1,9 +1,9 @@
-import path from 'path';
-import winston from 'winston';
-import WinstonCloudwatch from 'winston-cloudwatch';
-import AWS from 'aws-sdk';
-import crypto from 'crypto';
-import { name, version } from '../package.json';
+const path = require('path');
+const winston = require('winston');
+const WinstonCloudwatch = require('winston-cloudwatch');
+const AWS = require('aws-sdk');
+const crypto = require('crypto');
+const { name, version } = require('../package.json');
 
 AWS.config.update({ region: process.env.AWS_REGION || 'us-east-1' });
 
@@ -22,7 +22,7 @@ const cloudWatchTransport = new WinstonCloudwatch({
   },
 });
 
-function createProdLogger(toFilePath: string) {
+function createProdLogger(toFilePath) {
   const relativeFilePath = path.relative(baseDir, toFilePath);
   return winston.createLogger({
     format: winston.format.combine(
