@@ -3,16 +3,17 @@ const winston = require('winston');
 const WinstonCloudwatch = require('winston-cloudwatch');
 const AWS = require('aws-sdk');
 const crypto = require('crypto');
-const { name, version } = require('../../package.json');
+const { name } = require('../../package.json');
 
 AWS.config.update({ region: process.env.AWS_REGION || 'us-east-1' });
 
+const logGroupName = name.substring(0, name.indexOf('@'));
 const startTime = new Date().toISOString();
 const baseDir = path.dirname(path.dirname(__filename));
 
 const cloudWatchTransport = new WinstonCloudwatch({
-	name,
-	logGroupName: name,
+	name: logGroupName,
+	logGroupName,
 	logStreamName() {
 		const date = new Date().toISOString().split('T')[0];
 		return `prod-${date}-${crypto
